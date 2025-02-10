@@ -11,8 +11,6 @@ export const thirdwebAllowedWallets = [
   createWallet("com.coinbase.wallet"),
 ];
 
-import { thirdwebChain } from "constants/chains";
-import { THIRDWEB_CLIENT_ID } from "constants/env";
 import {
   createContext,
   ReactNode,
@@ -22,6 +20,8 @@ import {
   useRef,
 } from "react";
 import { createWallet, walletConnect } from "thirdweb/wallets";
+import { thirdwebChain } from "@/constants/chains";
+import { THIRDWEB_CLIENT_ID } from "@/constants/env";
 
 const Context = createContext({ open: () => {} });
 
@@ -40,7 +40,6 @@ export default function ThirdWebProvider({
   return (
     <Context.Provider value={value}>
       <ThirdwebProvider>
-        <div ref={ref} style={{ display: "none" }}>
           <ConnectButton
             client={thirdwebClient}
             wallets={thirdwebAllowedWallets}
@@ -62,7 +61,6 @@ export default function ThirdWebProvider({
               thirdwebChain,
             ]}
           />
-        </div>
         {children}
       </ThirdwebProvider>
     </Context.Provider>
