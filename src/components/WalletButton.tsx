@@ -1,5 +1,4 @@
-import { useState, useEffect, createContext, useMemo } from "react";
-import { toast } from "sonner";
+import { createContext, useMemo } from "react";
 
 // Thirdweb Wallet Provider
 import { ConnectButton, darkTheme, ThirdwebProvider } from "thirdweb/react";
