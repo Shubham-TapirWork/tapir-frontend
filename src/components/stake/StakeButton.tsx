@@ -84,7 +84,7 @@ export const StakeButton = ({
           <span className="animate-spin mr-2">◌</span>
           Staking...
         </>
-      ) : "Stake Now"}
+      ) : "Buy"}
     </Button>
   );
 };

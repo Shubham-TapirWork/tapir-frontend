@@ -90,19 +90,19 @@ export const StethStaking = () => {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <StakingCard
-          title="Regular Staking"
-          description="Balanced risk and reward"
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        {/* <StakingCard
+          title="Safe Staking"
+          description="Lower risk, stable returns"
           apy="4.20%"
           type="regular"
           isSelected={selectedStrategy === "regular"}
           onSelect={() => handleStrategySelect("regular")}
           disabled={!isWalletConnected}
-        />
+        /> */}
         <StakingCard
-          title="Safe Staking"
-          description="Lower risk, stable returns"
+          title="DP_token"
+          description="Depeg-protected asset"
           apy="8.15%"
           type="safe"
           isSelected={selectedStrategy === "safe"}
@@ -110,8 +110,8 @@ export const StethStaking = () => {
           disabled={!isWalletConnected}
         />
         <StakingCard
-          title="Boosted Staking"
-          description="Higher risk, higher returns"
+          title="YB_token"
+          description="Yield-boosted asset"
           apy="12.50%"
           type="boosted"
           isSelected={selectedStrategy === "boosted"}
@@ -126,13 +126,13 @@ export const StethStaking = () => {
             value="stake" 
             className="flex-1 data-[state=active]:bg-tapir-purple data-[state=active]:text-white"
           >
-            Stake
+            Buy
           </TabsTrigger>
           <TabsTrigger 
             value="withdraw" 
             className="flex-1 data-[state=active]:bg-tapir-purple data-[state=active]:text-white"
           >
-            Withdraw
+            Sell
           </TabsTrigger>
         </TabsList>
         

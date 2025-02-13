@@ -43,7 +43,10 @@ export const StakingCard = ({
       <CardHeader className="p-3">
         <CardTitle className="text-sm text-white flex items-center gap-2">
           <ArrowUpCircle className="h-3 w-3 text-tapir-purple" />
-          <span className="flex-1">{title}</span>
+          <div className="flex flex-wrap flex-col">
+            <span className="flex-1">{title}</span>
+            <span className="text-gray-400 text-xs">{description}</span>
+          </div>
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>

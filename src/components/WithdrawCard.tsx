@@ -44,9 +44,9 @@ export const WithdrawCard = ({
   const getTokenName = () => {
     switch (selectedStrategy) {
       case "safe":
-        return "DP_wETH";
+        return "DP";
       case "boosted":
-        return "YB_wETH";
+        return "YB";
       case "regular":
       default:
         return "tETH";
@@ -82,7 +82,7 @@ export const WithdrawCard = ({
                 <span className="animate-spin mr-2">◌</span>
                 Withdrawing...
               </>
-            ) : "Withdraw Now"}
+            ) : "Sell"}
           </Button>
 
           <StakingInfo
