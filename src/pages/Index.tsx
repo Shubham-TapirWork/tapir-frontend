@@ -1,4 +1,5 @@
 
+import * as React from "react";
 import { WalletButton } from "@/components/WalletButton";
 import { StethStaking } from "@/components/StethStaking";
 import { ApyGraph } from "@/components/ApyGraph";
@@ -89,7 +90,7 @@ const Index = () => {
               value="lp"
               className="data-[state=active]:bg-tapir-purple data-[state=active]:text-white text-sm"
             >
-              LP
+              Liquidity
             </TabsTrigger>
             <TabsTrigger 
               value="split"
