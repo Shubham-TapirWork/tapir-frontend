@@ -5,6 +5,8 @@ import { StethStaking } from "@/components/StethStaking";
 import { ApyGraph } from "@/components/ApyGraph";
 import { Twitter } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { LPPosition } from "@/components/LPPosition";
+import { LiquidityOperations } from "@/components/LiquidityOperations";
 import {
   Select,
   SelectContent,
@@ -14,8 +16,24 @@ import {
 } from "@/components/ui/select";
 import { useState } from "react";
 
+interface PoolData {
+  id: number;
+  name: string;
+  version: string;
+  tvl: string;
+  apr: string;
+  volume24h: string;
+  fee: string;
+}
+
 const Index = () => {
   const [selectedAsset, setSelectedAsset] = useState<string>("ethereum");
+  const [selectedPool, setSelectedPool] = useState<PoolData>();
+
+  const handleAssetChange = (value: string) => {
+    setSelectedAsset(value);
+    setSelectedPool(undefined); // Reset selected pool when asset changes
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-tapir-dark to-tapir-accent flex flex-col">
@@ -35,7 +53,7 @@ const Index = () => {
         <div className="mb-6">
           <Select 
             value={selectedAsset}
-            onValueChange={setSelectedAsset}
+            onValueChange={handleAssetChange}
           >
             <SelectTrigger className="w-full md:w-[300px] h-[60px] bg-tapir-card/50 border-tapir-purple/20 text-white hover:bg-tapir-card/70 focus:ring-tapir-purple/40 transition-all duration-200">
               <SelectValue placeholder="Select an asset to stake" />
@@ -112,9 +130,15 @@ const Index = () => {
           
           <TabsContent 
             value="lp"
+            className="space-y-8"
           >
-            <div className="text-center text-gray-400 py-12 text-sm">
-              LP features coming soon
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <LPPosition 
+                selectedAsset={selectedAsset} 
+                onPoolSelect={setSelectedPool}
+                selectedPool={selectedPool}
+              />
+              <LiquidityOperations selectedPool={selectedPool} />
             </div>
           </TabsContent>
           
