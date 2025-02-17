@@ -1,4 +1,3 @@
-
 import { WalletButton } from "@/components/WalletButton";
 import { StethStaking } from "@/components/StethStaking";
 import { ApyGraph } from "@/components/ApyGraph";
@@ -17,109 +16,107 @@ const Index = () => {
   const [selectedAsset, setSelectedAsset] = useState<string>("ethereum");
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-tapir-dark to-tapir-accent flex flex-col">
+    <div className="min-h-screen bg-slate-900 flex flex-col">
       <div className="container mx-auto px-4 py-8 flex-grow">
         <div className="flex justify-between items-center mb-8">
-          <div className="flex items-center gap-4">
-            <img 
-              src="/uploads/90d8609f-9772-4686-b125-07b559255d75.png" 
-              alt="Tapir Logo" 
-              className="h-12 w-auto"
-            />
-            <h1 className="text-white font-bold uppercase text-[20px] tracking-[4px]">Tapir Money</h1>
-          </div>
+          <img src="/Logo.svg" alt="Logo" className="h-8 w-auto" />
           <WalletButton />
         </div>
 
         <div className="mb-6">
-          <Select 
-            value={selectedAsset}
-            onValueChange={setSelectedAsset}
-          >
+          <Select value={selectedAsset} onValueChange={setSelectedAsset}>
             <SelectTrigger className="w-full md:w-[300px] h-[60px] bg-tapir-card/50 border-tapir-purple/20 text-white hover:bg-tapir-card/70 focus:ring-tapir-purple/40 transition-all duration-200">
               <SelectValue placeholder="Select an asset to stake" />
             </SelectTrigger>
             <SelectContent className="bg-tapir-card border-tapir-purple/20 animate-in fade-in-0 zoom-in-95 duration-200">
-              <SelectItem value="stablecoin" className="text-white hover:bg-tapir-purple/20 focus:bg-tapir-purple/30 py-3 cursor-pointer">
+              <SelectItem
+                value="stablecoin"
+                className="text-white hover:bg-tapir-purple/20 focus:bg-tapir-purple/30 py-3 cursor-pointer"
+              >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center shrink-0">
                     <span className="text-green-500 text-xl">$</span>
                   </div>
                   <div className="flex flex-col items-start">
                     <div className="font-medium text-base">Stablecoin</div>
-                    <div className="text-sm text-gray-400">Stake your stablecoins</div>
+                    <div className="text-sm text-gray-400">
+                      Stake your stablecoins
+                    </div>
                   </div>
                 </div>
               </SelectItem>
-              <SelectItem value="bitcoin" className="text-white hover:bg-tapir-purple/20 focus:bg-tapir-purple/30 py-3 cursor-pointer">
+              <SelectItem
+                value="bitcoin"
+                className="text-white hover:bg-tapir-purple/20 focus:bg-tapir-purple/30 py-3 cursor-pointer"
+              >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center shrink-0">
                     <span className="text-orange-500 text-xl">₿</span>
                   </div>
                   <div className="flex flex-col items-start">
                     <div className="font-medium text-base">Bitcoin</div>
-                    <div className="text-sm text-gray-400">Stake your BTC or wBTC</div>
+                    <div className="text-sm text-gray-400">
+                      Stake your BTC or wBTC
+                    </div>
                   </div>
                 </div>
               </SelectItem>
-              <SelectItem value="ethereum" className="text-white hover:bg-tapir-purple/20 focus:bg-tapir-purple/30 py-3 cursor-pointer">
+              <SelectItem
+                value="ethereum"
+                className="text-white hover:bg-tapir-purple/20 focus:bg-tapir-purple/30 py-3 cursor-pointer"
+              >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center shrink-0">
                     <span className="text-blue-500 text-xl">Ξ</span>
                   </div>
                   <div className="flex flex-col items-start">
                     <div className="font-medium text-base">Ethereum</div>
-                    <div className="text-sm text-gray-400">Stake ETH or wETH</div>
+                    <div className="text-sm text-gray-400">
+                      Stake ETH or wETH
+                    </div>
                   </div>
                 </div>
               </SelectItem>
             </SelectContent>
           </Select>
         </div>
-        
+
         <Tabs defaultValue="trade" className="space-y-4">
           <TabsList className="bg-tapir-card/50 border border-tapir-purple/20">
-            <TabsTrigger 
+            <TabsTrigger
               value="trade"
               className="data-[state=active]:bg-tapir-purple data-[state=active]:text-white text-sm"
             >
               Trade
             </TabsTrigger>
-            <TabsTrigger 
+            <TabsTrigger
               value="lp"
               className="data-[state=active]:bg-tapir-purple data-[state=active]:text-white text-sm"
             >
               LP
             </TabsTrigger>
-            <TabsTrigger 
+            <TabsTrigger
               value="split"
               className="data-[state=active]:bg-tapir-purple data-[state=active]:text-white text-sm"
             >
               Split
             </TabsTrigger>
           </TabsList>
-          
-          <TabsContent 
-            value="trade" 
-            className="space-y-8"
-          >
+
+          <TabsContent value="trade" className="space-y-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <StethStaking />
               <ApyGraph />
             </div>
           </TabsContent>
-          
-          <TabsContent 
-            value="lp"
-          >
+
+          <TabsContent value="lp">
             <div className="text-center text-gray-400 py-12 text-sm">
               LP features coming soon
             </div>
           </TabsContent>
-          
-          <TabsContent 
-            value="split"
-          >
+
+          <TabsContent value="split">
             <div className="text-center text-gray-400 py-12 text-sm">
               Split features coming soon
             </div>
