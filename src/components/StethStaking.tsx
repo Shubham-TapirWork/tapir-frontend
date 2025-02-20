@@ -121,16 +121,16 @@ export const StethStaking = () => {
       </div>
 
       <Tabs defaultValue="stake" className="w-full">
-        <TabsList className="w-full bg-tapir-card/50 border border-tapir-purple/20">
+        <TabsList className="w-full bg-tapir-card/50 border border-purple-500/20">
           <TabsTrigger 
             value="stake" 
-            className="flex-1 data-[state=active]:bg-tapir-purple data-[state=active]:text-white"
+            className="flex-1 data-[state=active]:bg-purple-500 data-[state=active]:text-white"
           >
             Buy
           </TabsTrigger>
           <TabsTrigger 
             value="withdraw" 
-            className="flex-1 data-[state=active]:bg-tapir-purple data-[state=active]:text-white"
+            className="flex-1 data-[state=active]:bg-purple-500 data-[state=active]:text-white"
           >
             Sell
           </TabsTrigger>

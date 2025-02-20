@@ -38,7 +38,7 @@ export const StakeButton = ({
     return (
       <Button
         disabled={true}
-        className="w-full bg-gradient-to-r from-tapir-purple to-tapir-accent hover:opacity-90 text-white"
+        className="w-full bg-purple-500 hover:opacity-90 text-white"
       >
         Connect Wallet
       </Button>
@@ -49,7 +49,7 @@ export const StakeButton = ({
     return (
       <Button
         disabled={true}
-        className="w-full bg-gradient-to-r from-tapir-purple to-tapir-accent hover:opacity-90 text-white"
+        className="w-full bg-purple-500 hover:opacity-90 text-white"
       >
         Select a Strategy Above
       </Button>
@@ -61,7 +61,7 @@ export const StakeButton = ({
       <Button
         onClick={() => handleApprove(ethAmount)}
         disabled={isApproving || isCheckingAllowance}
-        className="w-full bg-gradient-to-r from-tapir-purple to-tapir-accent hover:opacity-90 text-white"
+        className="w-full bg-purple-500 hover:opacity-90 text-white"
       >
         {isApproving ? (
           <>
@@ -77,7 +77,7 @@ export const StakeButton = ({
     <Button
       onClick={onStake}
       disabled={isStaking || isCheckingAllowance}
-      className="w-full bg-gradient-to-r from-tapir-purple to-tapir-accent hover:opacity-90 text-white"
+      className="w-full bg-purple-500 hover:opacity-90 text-white"
     >
       {isStaking ? (
         <>

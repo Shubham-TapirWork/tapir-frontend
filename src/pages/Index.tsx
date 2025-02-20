@@ -17,21 +17,21 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-slate-900 flex flex-col">
-      <div className="container mx-auto px-4 py-8 flex-grow">
-        <div className="flex justify-between items-center mb-8">
+      <div className="container mx-auto px-4 flex-grow">
+        <div className="flex p-2 justify-between border-b border-gray-800 items-center mb-8">
           <img src="/Logo.svg" alt="Logo" className="h-8 w-auto" />
           <WalletButton />
         </div>
 
         <div className="mb-6">
           <Select value={selectedAsset} onValueChange={setSelectedAsset}>
-            <SelectTrigger className="w-full md:w-[300px] h-[60px] bg-tapir-card/50 border-tapir-purple/20 text-white hover:bg-tapir-card/70 focus:ring-tapir-purple/40 transition-all duration-200">
+            <SelectTrigger className="w-full md:w-[300px] h-[60px] bg-tapir-card/50 border-purple-500/20 text-white hover:bg-tapir-card/70 focus:ring-purple-500/40 transition-all duration-200">
               <SelectValue placeholder="Select an asset to stake" />
             </SelectTrigger>
-            <SelectContent className="bg-tapir-card border-tapir-purple/20 animate-in fade-in-0 zoom-in-95 duration-200">
+            <SelectContent className="bg-tapir-card border-purple-500/20 animate-in fade-in-0 zoom-in-95 duration-200">
               <SelectItem
                 value="stablecoin"
-                className="text-white hover:bg-tapir-purple/20 focus:bg-tapir-purple/30 py-3 cursor-pointer"
+                className="text-white hover:bg-purple-500/20 focus:bg-purple-500/30 py-3 cursor-pointer"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center shrink-0">
@@ -47,7 +47,7 @@ const Index = () => {
               </SelectItem>
               <SelectItem
                 value="bitcoin"
-                className="text-white hover:bg-tapir-purple/20 focus:bg-tapir-purple/30 py-3 cursor-pointer"
+                className="text-white hover:bg-purple-500/20 focus:bg-purple-500/30 py-3 cursor-pointer"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center shrink-0">
@@ -63,7 +63,7 @@ const Index = () => {
               </SelectItem>
               <SelectItem
                 value="ethereum"
-                className="text-white hover:bg-tapir-purple/20 focus:bg-tapir-purple/30 py-3 cursor-pointer"
+                className="text-white hover:bg-purple-500/20 focus:bg-purple-500/30 py-3 cursor-pointer"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center shrink-0">
@@ -82,22 +82,22 @@ const Index = () => {
         </div>
 
         <Tabs defaultValue="trade" className="space-y-4">
-          <TabsList className="bg-tapir-card/50 border border-tapir-purple/20">
+          <TabsList className="bg-tapir-card/50 border border-purple-500/20">
             <TabsTrigger
               value="trade"
-              className="data-[state=active]:bg-tapir-purple data-[state=active]:text-white text-sm"
+              className="data-[state=active]:bg-purple-500 data-[state=active]:text-white text-sm"
             >
               Trade
             </TabsTrigger>
             <TabsTrigger
               value="lp"
-              className="data-[state=active]:bg-tapir-purple data-[state=active]:text-white text-sm"
+              className="data-[state=active]:bg-purple-500 data-[state=active]:text-white text-sm"
             >
               LP
             </TabsTrigger>
             <TabsTrigger
               value="split"
-              className="data-[state=active]:bg-tapir-purple data-[state=active]:text-white text-sm"
+              className="data-[state=active]:bg-purple-500 data-[state=active]:text-white text-sm"
             >
               Split
             </TabsTrigger>

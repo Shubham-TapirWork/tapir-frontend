@@ -54,10 +54,10 @@ export const WithdrawCard = ({
   };
 
   return (
-    <Card className="bg-tapir-card border-tapir-purple/20 hover:border-tapir-purple/40 transition-all duration-300">
+    <Card className="bg-tapir-card border-purple-500/20 hover:border-purple-500/40 transition-all duration-300">
       <CardHeader>
         <CardTitle className="text-white flex items-center gap-2">
-          <Coins className="h-5 w-5 text-tapir-purple" />
+          <Coins className="h-5 w-5 text-purple-500" />
           Withdraw {getTokenName()}
         </CardTitle>
       </CardHeader>
@@ -75,7 +75,7 @@ export const WithdrawCard = ({
           <Button
             onClick={() => handleWithdraw(tethAmount)}
             disabled={!isWalletConnected || isWithdrawing || parseFloat(userBalance) <= 0}
-            className="w-full bg-gradient-to-r from-tapir-purple to-tapir-accent hover:opacity-90 text-white"
+            className="w-full bg-purple-500 hover:opacity-90 text-white"
           >
             {isWithdrawing ? (
               <>

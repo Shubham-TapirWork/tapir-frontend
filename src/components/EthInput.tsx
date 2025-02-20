@@ -41,12 +41,12 @@ export const EthInput = ({
         placeholder="0.0"
         value={ethAmount}
         onChange={(e) => setEthAmount(e.target.value)}
-        className="bg-tapir-dark/50 border-tapir-purple/20 text-white pr-16"
+        className="bg-transparent border-purple-500/20 text-white pr-16"
         disabled={!isWalletConnected}
       />
       <button
         onClick={() => setEthAmount(userBalance)}
-        className="absolute right-3 top-[70%] -translate-y-1/2 text-xs font-medium text-tapir-purple hover:text-tapir-purple/80 transition-colors"
+        className="absolute right-3 top-[70%] -translate-y-1/2 text-xs font-medium text-white cursor-pointer disabled:cursor-not-allowed disabled:opacity-80 hover:opacity-80 transition-all duration-300"
         disabled={!isWalletConnected}
       >
         MAX
