@@ -162,15 +162,10 @@ export const LPPosition = ({ selectedAsset, onPoolSelect, selectedPool }: LPPosi
                       <div className="text-xs text-gray-400">
                         {pool.fee}
                       </div>
-                      {index === 0 ? (
+                      {index === 0 &&
                         <span className="text-xs px-2 py-0.5 rounded bg-[#9b87f5]/10 text-[#9b87f5] font-medium">
-                          NEW
-                        </span>
-                      ) : (
-                        <span className="text-xs px-2 py-0.5 rounded bg-[#7E69AB]/10 text-[#7E69AB] font-medium">
-                          OLD
-                        </span>
-                      )}
+                          Active
+                        </span>}
                     </div>
                   </TableCell>
                   <TableCell className="text-right text-white font-medium">

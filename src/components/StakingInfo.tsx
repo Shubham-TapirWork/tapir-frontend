@@ -29,9 +29,9 @@ export const StakingInfo = ({
       case "boosted":
         return "YB";
       case "regular":
-        return "tETH";
+        return "DP";
       default:
-        return "tETH";
+        return "DP";
     }
   };
 
