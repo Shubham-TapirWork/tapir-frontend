@@ -38,3 +38,14 @@ export interface ILiquidityPool extends BaseContract {
   getTotalEtherClaimOf(user: string): Promise<bigint>;
   getTotalPooledEther(): Promise<bigint>;
 }
+
+export interface ILPPool extends BaseContract {
+  balanceOf(address: string): Promise<bigint>;
+  tokens(index: number): Promise<string>;
+  totalSupply(): Promise<bigint>;
+  getVirtualPrice(): Promise<bigint>;
+  balances(index: number): Promise<bigint>;
+  addLiquidity(amounts: [BigNumberish, BigNumberish], minShares: BigNumberish): Promise<ContractTransactionResponse>;
+  removeLiquidity(shares: BigNumberish, minAmountsOut: [BigNumberish, BigNumberish]): Promise<ContractTransactionResponse>;
+  connect(signer: any): ILPPool;
+}

@@ -1,3 +1,4 @@
+import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { useTokenAllowance } from "@/hooks/useTokenAllowance";
 import { useApprove } from "@/hooks/useApprove";

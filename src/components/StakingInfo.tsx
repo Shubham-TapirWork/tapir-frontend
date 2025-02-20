@@ -1,3 +1,4 @@
+import * as React from "react";
 import { Info } from "lucide-react";
 import {
   Tooltip,
@@ -28,9 +29,9 @@ export const StakingInfo = ({
       case "boosted":
         return "YB";
       case "regular":
-        return "tETH";
+        return "DP";
       default:
-        return "tETH";
+        return "DP";
     }
   };
 

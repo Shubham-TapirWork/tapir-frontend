@@ -60,19 +60,13 @@ export const ApyGraph = () => {
     },
     series: [
       {
-        name: 'Regular Staking',
-        data: data.map(item => item.safeApy),
-        color: '#6E59A5',
-        type: 'line'
-      },
-      {
-        name: 'Safe Staking',
+        name: 'DP',
         data: data.map(item => item.regularApy),
         color: '#9b87f5',
         type: 'line'
       },
       {
-        name: 'Boosted Staking',
+        name: 'YB',
         data: data.map(item => item.boostedApy),
         color: '#7E69AB',
         type: 'line'
