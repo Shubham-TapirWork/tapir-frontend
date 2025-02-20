@@ -1,4 +1,3 @@
-import { WalletButton } from "@/components/WalletButton";
 import { StethStaking } from "@/components/StethStaking";
 import { ApyGraph } from "@/components/ApyGraph";
 import { Twitter } from "lucide-react";
@@ -11,16 +10,45 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState } from "react";
+import { ConnectButton, darkTheme } from "thirdweb/react";
+import { client } from "@/client";
+import { createWallet, walletConnect } from "thirdweb/wallets";
+import { thirdwebChain } from "@/constants/chains";
 
 const Index = () => {
   const [selectedAsset, setSelectedAsset] = useState<string>("ethereum");
-
+  const thirdwebAllowedWallets = [
+    createWallet("io.metamask"),
+    walletConnect(),
+    createWallet("com.coinbase.wallet"),
+  ];
+  
   return (
     <div className="min-h-screen bg-slate-900 flex flex-col">
       <div className="container mx-auto px-4 flex-grow">
         <div className="flex p-2 justify-between border-b border-gray-800 items-center mb-8">
           <img src="/Logo.svg" alt="Logo" className="h-8 w-auto" />
-          <WalletButton />
+          <ConnectButton
+            client={client}
+            wallets={thirdwebAllowedWallets}
+            connectModal={{
+              showThirdwebBranding: false,
+              size: "wide",
+              title: "Connect Wallet",
+              welcomeScreen: {
+                title: `Your gateway to the decentralized world`,
+                subtitle: `Connect a wallet to get started`,
+              },
+            }}
+            theme={darkTheme({
+              colors: {
+                accentText: "#a855f7",
+              },
+            })}
+            chains={[
+              thirdwebChain,
+            ]}
+          />
         </div>
 
         <div className="mb-6">
