@@ -1,84 +1,38 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { StakingCard } from "./StakingCard";
-import { getMetaMaskProvider } from "@/lib/wallet";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StakeCard } from "./StakeCard";
 import { WithdrawCard } from "./WithdrawCard";
-import { getTethContract } from "@/lib/contracts";
-import { ethers } from "ethers";
+import { useActiveAccount, useWalletBalance, useActiveWalletChain } from "thirdweb/react";
+import contracts from "@/contracts/contracts.json";
+import { client } from "@/client";
 
 export const StethStaking = () => {
-  const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [selectedStrategy, setSelectedStrategy] = useState<"safe" | "regular" | "boosted" | null>(null);
-  const [userBalance, setUserBalance] = useState<string>("0");
-  const [userTethBalance, setUserTethBalance] = useState<string>("0");
-  const [isLoadingBalance, setIsLoadingBalance] = useState(false);
-  const [isLoadingTethBalance, setIsLoadingTethBalance] = useState(false);
 
-  useEffect(() => {
-    const provider = getMetaMaskProvider();
-    if (provider) {
-      provider.request({ method: 'eth_accounts' })
-        .then((accounts: string[]) => {
-          setIsWalletConnected(accounts.length > 0);
-          if (accounts.length > 0) {
-            fetchBalance(accounts[0]);
-            fetchTethBalance(accounts[0]);
-          }
-        })
-        .catch(console.error);
+  // Get connected wallet address
+  const account = useActiveAccount();
+  const activeChain = useActiveWalletChain();
 
-      provider.on('accountsChanged', (accounts: string[]) => {
-        setIsWalletConnected(accounts.length > 0);
-        if (accounts.length > 0) {
-          fetchBalance(accounts[0]);
-          fetchTethBalance(accounts[0]);
-        } else {
-          setUserBalance("0");
-          setUserTethBalance("0");
-        }
-      });
-    }
-  }, []);
+  const isWalletConnected = !!account;
 
-  const fetchBalance = async (address: string) => {
-    const provider = getMetaMaskProvider();
-    if (provider) {
-      setIsLoadingBalance(true);
-      try {
-        const balance = await provider.request({
-          method: 'eth_getBalance',
-          params: [address, 'latest']
-        });
-        const balanceInEth = (parseInt(balance, 16) / 1e18).toFixed(4);
-        setUserBalance(balanceInEth);
-      } catch (error) {
-        console.error('Error fetching balance:', error);
-        setUserBalance("0");
-      } finally {
-        setIsLoadingBalance(false);
-      }
-    }
-  };
+  // Get native token (ETH) balance
+  const { data: ethBalance, isLoading: isLoadingBalance, isError: isErrorNativeBalance } = useWalletBalance({
+    chain: activeChain,
+    address: account?.address,
+    client,
+  });
+  const userBalance = ethBalance ? ethBalance.displayValue : "0";
 
-  const fetchTethBalance = async (address: string) => {
-    setIsLoadingTethBalance(true);
-    try {
-      const tethContract = await getTethContract();
-      if (!tethContract) {
-        throw new Error("Failed to get tETH contract");
-      }
-      const balance = await tethContract.balanceOf(address);
-      const balanceInEth = ethers.formatEther(balance);
-      setUserTethBalance(balanceInEth);
-    } catch (error) {
-      console.error('Error fetching tETH balance:', error);
-      setUserTethBalance("0");
-    } finally {
-      setIsLoadingTethBalance(false);
-    }
-  };
+  // Get tETH token balance
+  const { data: tethBalance, isLoading: isLoadingTethBalance, isError: isErrorTokenBalance } = useWalletBalance({
+    chain: activeChain,
+    address: account?.address,
+    client,
+    tokenAddress: contracts.tethContract.address
+  });
+  const userTethBalance = tethBalance ? tethBalance.displayValue : "0";
 
   const handleStrategySelect = (strategy: "safe" | "regular" | "boosted") => {
     if (!isWalletConnected) {
@@ -142,8 +96,6 @@ export const StethStaking = () => {
             userBalance={userBalance}
             isLoadingBalance={isLoadingBalance}
             selectedStrategy={selectedStrategy}
-            fetchBalance={fetchBalance}
-            fetchTethBalance={fetchTethBalance}
           />
         </TabsContent>
         
@@ -152,8 +104,8 @@ export const StethStaking = () => {
             isWalletConnected={isWalletConnected}
             userBalance={userTethBalance}
             isLoadingBalance={isLoadingTethBalance}
-            fetchBalance={fetchTethBalance}
-            fetchEthBalance={fetchBalance}
+            fetchBalance={userBalance}
+            fetchTethBalance={userTethBalance}
             selectedStrategy={selectedStrategy}
           />
         </TabsContent>
