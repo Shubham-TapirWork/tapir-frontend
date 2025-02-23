@@ -20,7 +20,13 @@ export const StakeCard = ({
   selectedStrategy,
 }: {
   isWalletConnected: boolean;
-  userBalance: string;
+  userBalance: {
+    value: bigint;
+    decimals: number;
+    displayValue: string;
+    symbol: string;
+    name: string;
+  };
   isLoadingBalance: boolean;
   selectedStrategy: "safe" | "regular" | "boosted" | null;
 }) => {
@@ -69,12 +75,12 @@ export const StakeCard = ({
     try {
       const amount = parseFloat(ethAmount);
       if (isNaN(amount) || amount <= 0) {
-        throw new Error("Please enter a valid amount greater than 0");
+        toast.error("Please enter a valid amount greater than 0");
       }
       
-      const balance = parseFloat(userBalance);
+      const balance = parseFloat(userBalance.displayValue);
       if (amount > balance) {
-        throw new Error("Insufficient balance");
+        toast.error("Insufficient balance");
       }
     } catch (error: any) {
       toast.error(error.message);
@@ -130,14 +136,14 @@ export const StakeCard = ({
       <CardHeader>
         <CardTitle className="text-white flex items-center gap-2">
           <Coins className="h-5 w-5 text-purple-500" />
-          Buy
+          Buy {userBalance?.symbol}
         </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-6">
           <EthInput
-            ethAmount={ethAmount}
-            setEthAmount={setEthAmount}
+            amount={ethAmount}
+            setAmount={setEthAmount}
             userBalance={userBalance}
             isWalletConnected={isWalletConnected}
             isLoadingBalance={isLoadingBalance}

@@ -23,7 +23,6 @@ export const StethStaking = () => {
     address: account?.address,
     client,
   });
-  const userBalance = ethBalance ? ethBalance.displayValue : "0";
 
   // Get tETH token balance
   const { data: tethBalance, isLoading: isLoadingTethBalance, isError: isErrorTokenBalance } = useWalletBalance({
@@ -32,7 +31,6 @@ export const StethStaking = () => {
     client,
     tokenAddress: contracts.tethContract.address
   });
-  const userTethBalance = tethBalance ? tethBalance.displayValue : "0";
 
   const handleStrategySelect = (strategy: "safe" | "regular" | "boosted") => {
     if (!isWalletConnected) {
@@ -93,7 +91,7 @@ export const StethStaking = () => {
         <TabsContent value="stake">
           <StakeCard
             isWalletConnected={isWalletConnected}
-            userBalance={userBalance}
+            userBalance={ethBalance}
             isLoadingBalance={isLoadingBalance}
             selectedStrategy={selectedStrategy}
           />
@@ -102,10 +100,8 @@ export const StethStaking = () => {
         <TabsContent value="withdraw">
           <WithdrawCard
             isWalletConnected={isWalletConnected}
-            userBalance={userTethBalance}
+            userBalance={tethBalance}
             isLoadingBalance={isLoadingTethBalance}
-            fetchBalance={userBalance}
-            fetchTethBalance={userTethBalance}
             selectedStrategy={selectedStrategy}
           />
         </TabsContent>
