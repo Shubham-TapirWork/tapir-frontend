@@ -1,4 +1,3 @@
-import * as React from "react";
 import { useState } from "react";
 import { Coins } from "lucide-react";
 import { toast } from "sonner";

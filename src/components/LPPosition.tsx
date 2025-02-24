@@ -1,5 +1,4 @@
 
-import * as React from "react";
 import { useEffect, useState } from "react";
 import { getLPPoolContract } from "@/lib/contracts";
 import { getMetaMaskProvider } from "@/lib/wallet";

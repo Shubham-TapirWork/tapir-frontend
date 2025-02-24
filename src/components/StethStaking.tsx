@@ -1,4 +1,3 @@
-import * as React from "react";
 import { useState } from "react";
 import { StakingCard } from "./StakingCard";
 import { toast } from "sonner";
