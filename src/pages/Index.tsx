@@ -1,3 +1,4 @@
+import { WalletButton } from "@/components/WalletButton";
 import { StethStaking } from "@/components/StethStaking";
 import { ApyGraph } from "@/components/ApyGraph";
 import { Twitter } from "lucide-react";
@@ -26,10 +27,6 @@ interface PoolData {
   volume24h: string;
   fee: string;
 }
-import { ConnectButton, darkTheme } from "thirdweb/react";
-import { client } from "@/client";
-import { createWallet, walletConnect } from "thirdweb/wallets";
-import { thirdwebChain } from "@/constants/chains";
 
 const Index = () => {
   const [selectedAsset, setSelectedAsset] = useState<string>("ethereum");
