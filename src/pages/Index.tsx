@@ -58,11 +58,11 @@ const Index = () => {
               value={selectedAsset}
               onValueChange={handleAssetChange}
             >
-              <SelectTrigger className="w-[300px] h-[60px] bg-tapir-card/50 border-tapir-purple/20 text-white hover:bg-tapir-card/70 focus:ring-tapir-purple/40 transition-all duration-200">
+              <SelectTrigger className="w-[300px] h-[60px] bg-tapir-card/50 border-purple-500/20 text-white hover:bg-tapir-card/70 focus:ring-purple-500/40 transition-all duration-200">
                 <SelectValue placeholder="Select an asset to stake" />
               </SelectTrigger>
-              <SelectContent className="bg-tapir-card border-tapir-purple/20 animate-in fade-in-0 zoom-in-95 duration-200">
-                <SelectItem value="stablecoin" className="text-white hover:bg-tapir-purple/20 focus:bg-tapir-purple/30 py-3 cursor-pointer">
+              <SelectContent className="bg-tapir-card border-purple-500/20 animate-in fade-in-0 zoom-in-95 duration-200">
+                <SelectItem value="stablecoin" className="text-white hover:bg-purple-500/20 focus:bg-purple-500/30 py-3 cursor-pointer">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center shrink-0">
                       <span className="text-green-500 text-xl">$</span>
@@ -73,7 +73,7 @@ const Index = () => {
                     </div>
                   </div>
                 </SelectItem>
-                <SelectItem value="bitcoin" className="text-white hover:bg-tapir-purple/20 focus:bg-tapir-purple/30 py-3 cursor-pointer">
+                <SelectItem value="bitcoin" className="text-white hover:bg-purple-500/20 focus:bg-purple-500/30 py-3 cursor-pointer">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center shrink-0">
                       <span className="text-orange-500 text-xl">₿</span>
@@ -84,7 +84,7 @@ const Index = () => {
                     </div>
                   </div>
                 </SelectItem>
-                <SelectItem value="ethereum" className="text-white hover:bg-tapir-purple/20 focus:bg-tapir-purple/30 py-3 cursor-pointer">
+                <SelectItem value="ethereum" className="text-white hover:bg-purple-500/20 focus:bg-purple-500/30 py-3 cursor-pointer">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center shrink-0">
                       <span className="text-blue-500 text-xl">Ξ</span>
@@ -98,22 +98,22 @@ const Index = () => {
               </SelectContent>
             </Select>
 
-            <TabsList className="bg-tapir-card/50 border border-tapir-purple/20">
+            <TabsList className="bg-tapir-card/50 border border-purple-500/20">
               <TabsTrigger 
                 value="staking"
-                className="data-[state=active]:bg-tapir-purple data-[state=active]:text-white text-sm"
+                className="data-[state=active]:bg-purple-500 data-[state=active]:text-white text-sm"
               >
                 Swap
               </TabsTrigger>
               <TabsTrigger 
                 value="lp"
-                className="data-[state=active]:bg-tapir-purple data-[state=active]:text-white text-sm"
+                className="data-[state=active]:bg-purple-500 data-[state=active]:text-white text-sm"
               >
                 Liquidity
               </TabsTrigger>
               <TabsTrigger 
                 value="advanced"
-                className="data-[state=active]:bg-tapir-purple data-[state=active]:text-white text-sm"
+                className="data-[state=active]:bg-purple-500 data-[state=active]:text-white text-sm"
               >
                 Split
               </TabsTrigger>

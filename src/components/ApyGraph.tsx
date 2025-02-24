@@ -100,10 +100,10 @@ export const ApyGraph = () => {
   };
 
   return (
-    <Card className="bg-tapir-card border-tapir-purple/20">
+    <Card className="bg-tapir-card border-purple-500/20">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
         <CardTitle className="text-white">Historical APY</CardTitle>
-        <div className="flex gap-2">
+        <div className="flex gap-2 text-white hover:text-white">
           {["1W", "1M", "3M", "1Y"].map((period) => (
             <Button
               key={period}
@@ -112,8 +112,8 @@ export const ApyGraph = () => {
               onClick={() => setTimeframe(period as typeof timeframe)}
               className={`text-xs ${
                 timeframe === period
-                  ? "bg-tapir-purple text-white hover:bg-tapir-purple/90"
-                  : "text-tapir-purple hover:bg-tapir-purple/10"
+                  ? "bg-purple-500 hover:bg-purple-500/90"
+                  : "hover:bg-purple-500/10"
               }`}
             >
               {period}
@@ -122,12 +122,10 @@ export const ApyGraph = () => {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="h-[200px]">
           <HighchartsReact
             highcharts={Highcharts}
             options={options}
           />
-        </div>
       </CardContent>
     </Card>
   );

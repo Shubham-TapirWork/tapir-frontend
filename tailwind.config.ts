@@ -25,8 +25,6 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         tapir: {
-          dark: "rgb(7, 15, 45)",
-          accent: "rgb(81, 24, 50)",
           purple: "#9b87f5",
           card: "#1A1F2C",
         },
