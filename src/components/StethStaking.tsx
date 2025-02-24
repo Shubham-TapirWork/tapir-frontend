@@ -1,3 +1,4 @@
+import * as React from "react";
 import { useState, useEffect } from "react";
 import { StakingCard } from "./StakingCard";
 import { getMetaMaskProvider } from "@/lib/wallet";
