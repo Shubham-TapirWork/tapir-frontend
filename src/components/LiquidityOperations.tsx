@@ -121,7 +121,7 @@ export const LiquidityOperations = ({ selectedPool }: LiquidityOperationsProps) 
 
   if (!selectedPool) {
     return (
-      <Card className="bg-tapir-card border-tapir-purple/20 transition-all duration-300 ease-in-out">
+      <Card className="bg-tapir-card border-purple-500/20 transition-all duration-300 ease-in-out">
         <CardContent className="pt-6">
           <div className="flex flex-col items-center justify-center h-[300px] text-center space-y-4 animate-in fade-in-0 zoom-in-95 duration-300">
             <div className="text-gray-400">
@@ -137,7 +137,7 @@ export const LiquidityOperations = ({ selectedPool }: LiquidityOperationsProps) 
   }
 
   return (
-    <Card className="bg-tapir-card border-tapir-purple/20 transition-all duration-300 ease-in-out animate-in fade-in-0 zoom-in-95">
+    <Card className="bg-tapir-card border-purple-500/20 transition-all duration-300 ease-in-out animate-in fade-in-0 zoom-in-95">
       <CardContent className="pt-6">
         <div className="mb-6 animate-in fade-in-0 slide-in-from-right-5 duration-300">
           <h3 className="text-white font-medium">Selected Pool: {selectedPool.name}</h3>
@@ -146,16 +146,16 @@ export const LiquidityOperations = ({ selectedPool }: LiquidityOperationsProps) 
           </div>
         </div>
         <Tabs defaultValue="add" className="w-full">
-          <TabsList className="w-full bg-tapir-dark/50 border border-tapir-purple/20 animate-in fade-in-0 slide-in-from-right-3 duration-500">
+          <TabsList className="w-full bg-tapir-dark/50 border border-purple-500/20 animate-in fade-in-0 slide-in-from-right-3 duration-500">
             <TabsTrigger 
               value="add" 
-              className="w-1/2 data-[state=active]:bg-tapir-purple data-[state=active]:text-white transition-all duration-200"
+              className="w-1/2 data-[state=active]:bg-purple-500 data-[state=active]:text-white transition-all duration-200"
             >
               Add Liquidity
             </TabsTrigger>
             <TabsTrigger 
               value="remove" 
-              className="w-1/2 data-[state=active]:bg-tapir-purple data-[state=active]:text-white transition-all duration-200"
+              className="w-1/2 data-[state=active]:bg-purple-500 data-[state=active]:text-white transition-all duration-200"
             >
               Remove Liquidity
             </TabsTrigger>
@@ -170,7 +170,7 @@ export const LiquidityOperations = ({ selectedPool }: LiquidityOperationsProps) 
                   placeholder="0.0"
                   value={amount0}
                   onChange={(e) => setAmount0(e.target.value)}
-                  className="bg-tapir-dark/50 border-tapir-purple/20 text-white transition-all duration-200 focus:scale-[1.02] hover:border-tapir-purple/40"
+                  className="bg-tapir-dark/50 border-purple-500/20 text-white transition-all duration-200 focus:scale-[1.02] hover:border-purple-500/40"
                 />
               </div>
               <div className="transition-all duration-200 hover:translate-x-1">
@@ -180,13 +180,13 @@ export const LiquidityOperations = ({ selectedPool }: LiquidityOperationsProps) 
                   placeholder="0.0"
                   value={amount1}
                   onChange={(e) => setAmount1(e.target.value)}
-                  className="bg-tapir-dark/50 border-tapir-purple/20 text-white transition-all duration-200 focus:scale-[1.02] hover:border-tapir-purple/40"
+                  className="bg-tapir-dark/50 border-purple-500/20 text-white transition-all duration-200 focus:scale-[1.02] hover:border-purple-500/40"
                 />
               </div>
               <Button
                 onClick={handleAddLiquidity}
                 disabled={isLoading}
-                className="w-full bg-gradient-to-r from-tapir-purple to-tapir-accent hover:opacity-90 text-white transition-all duration-300 hover:scale-[1.02] active:scale-95"
+                className="w-full bg-purple-500 hover:bg-purple-500/90 text-white transition-all duration-300 hover:scale-[1.02] active:scale-95"
               >
                 {isLoading ? "Adding Liquidity..." : "Add Liquidity"}
               </Button>
@@ -202,7 +202,7 @@ export const LiquidityOperations = ({ selectedPool }: LiquidityOperationsProps) 
                   placeholder="0.0"
                   value={shares}
                   onChange={(e) => setShares(e.target.value)}
-                  className="bg-tapir-dark/50 border-tapir-purple/20 text-white transition-all duration-200 focus:scale-[1.02] hover:border-tapir-purple/40"
+                  className="bg-tapir-dark/50 border-purple-500/20 text-white transition-all duration-200 focus:scale-[1.02] hover:border-purple-500/40"
                 />
               </div>
               <div className="space-y-2">
@@ -218,13 +218,13 @@ export const LiquidityOperations = ({ selectedPool }: LiquidityOperationsProps) 
                   onValueChange={handleSliderChange}
                   max={100}
                   step={1}
-                  className="[&_[role=slider]]:bg-tapir-purple [&_[role=slider]]:border-tapir-purple [&_[role=slider]]:h-4 [&_[role=slider]]:w-4 [&_.relative]:bg-tapir-dark/50 [&_.absolute]:bg-tapir-purple transition-all duration-200"
+                  className="[&_[role=slider]]:bg-purple-500 [&_[role=slider]]:border-purple-500 [&_[role=slider]]:h-4 [&_[role=slider]]:w-4 [&_.relative]:bg-tapir-dark/50 [&_.absolute]:bg-purple-500 transition-all duration-200"
                 />
               </div>
               <Button
                 onClick={handleRemoveLiquidity}
                 disabled={isLoading}
-                className="w-full bg-gradient-to-r from-tapir-purple to-tapir-accent hover:opacity-90 text-white transition-all duration-300 hover:scale-[1.02] active:scale-95"
+                className="w-full bg-purple-500 hover:bg-purple-500/90 text-white transition-all duration-300 hover:scale-[1.02] active:scale-95"
               >
                 {isLoading ? "Removing Liquidity..." : "Remove Liquidity"}
               </Button>
