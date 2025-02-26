@@ -93,7 +93,7 @@ export const TransactionHistory = ({ selectedPool }: TransactionHistoryProps) =>
 
   if (!selectedPool) {
     return (
-      <Card className="bg-tapir-card border-tapir-purple/20">
+      <Card className="bg-tapir-card border-purple-500/20">
         <CardContent className="pt-6">
           <div className="text-center text-gray-400 py-12 text-sm">
             Select a pool to view transactions
@@ -104,7 +104,7 @@ export const TransactionHistory = ({ selectedPool }: TransactionHistoryProps) =>
   }
 
   return (
-    <Card className="bg-tapir-card border-tapir-purple/20">
+    <Card className="bg-tapir-card border-purple-500/20">
       <CardContent className="pt-6">
         <div className="mb-6">
           <div className="flex items-center justify-between mb-4">
@@ -114,10 +114,10 @@ export const TransactionHistory = ({ selectedPool }: TransactionHistoryProps) =>
                 value={valueFilter}
                 onValueChange={setValueFilter}
               >
-                <SelectTrigger className="w-[140px] h-8 bg-tapir-dark/50 border-tapir-purple/20 text-white text-sm">
+                <SelectTrigger className="w-[140px] h-8 bg-tapir-dark/50 border-purple-500/20 text-white text-sm">
                   <SelectValue placeholder="Filter by value" />
                 </SelectTrigger>
-                <SelectContent className="bg-tapir-card border-tapir-purple/20">
+                <SelectContent className="bg-tapir-card border-purple-500/20">
                   <SelectItem value="all">All Actions</SelectItem>
                   <SelectItem value="50">$50 & above</SelectItem>
                 </SelectContent>
@@ -128,7 +128,7 @@ export const TransactionHistory = ({ selectedPool }: TransactionHistoryProps) =>
                   placeholder="Filter by wallet address"
                   value={filterValue}
                   onChange={(e) => setFilterValue(e.target.value)}
-                  className="pl-10 h-8 w-[200px] bg-tapir-dark/50 border-tapir-purple/20 text-white text-sm"
+                  className="pl-10 h-8 w-[200px] bg-tapir-dark/50 border-purple-500/20 text-white text-sm"
                 />
               </div>
             </div>
@@ -138,7 +138,7 @@ export const TransactionHistory = ({ selectedPool }: TransactionHistoryProps) =>
               onClick={() => setActiveTab('trade')}
               className={`px-4 py-1 rounded-md text-sm transition-colors ${
                 activeTab === 'trade'
-                  ? 'bg-tapir-purple text-white'
+                  ? 'bg-purple-500 text-white'
                   : 'text-gray-400 hover:text-white'
               }`}
             >
@@ -148,7 +148,7 @@ export const TransactionHistory = ({ selectedPool }: TransactionHistoryProps) =>
               onClick={() => setActiveTab('liquidity')}
               className={`px-4 py-1 rounded-md text-sm transition-colors ${
                 activeTab === 'liquidity'
-                  ? 'bg-tapir-purple text-white'
+                  ? 'bg-purple-500 text-white'
                   : 'text-gray-400 hover:text-white'
               }`}
             >
@@ -160,7 +160,7 @@ export const TransactionHistory = ({ selectedPool }: TransactionHistoryProps) =>
         <div className="overflow-auto max-h-[400px]">
           <Table>
             <TableHeader>
-              <TableRow className="border-tapir-purple/20 hover:bg-transparent">
+              <TableRow className="border-purple-500/20 hover:bg-transparent">
                 <TableHead className="text-gray-400">User</TableHead>
                 <TableHead className="text-gray-400">Action</TableHead>
                 <TableHead className="text-gray-400">Value</TableHead>
@@ -171,7 +171,7 @@ export const TransactionHistory = ({ selectedPool }: TransactionHistoryProps) =>
               {filteredTransactions.map((tx, i) => (
                 <TableRow 
                   key={i} 
-                  className="border-tapir-purple/20 hover:bg-tapir-purple/5"
+                  className="border-purple-500/20 hover:bg-purple-500/5"
                 >
                   <TableCell className="text-white">{tx.user}</TableCell>
                   <TableCell>

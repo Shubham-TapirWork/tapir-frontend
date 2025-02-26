@@ -136,7 +136,7 @@ export const StakeCard = ({
       <CardHeader>
         <CardTitle className="text-white flex items-center gap-2">
           <Coins className="h-5 w-5 text-purple-500" />
-          Buy {userBalance?.symbol}
+          Buy
         </CardTitle>
       </CardHeader>
       <CardContent>

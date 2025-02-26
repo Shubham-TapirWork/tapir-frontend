@@ -39,26 +39,16 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-slate-900 flex flex-col">
-      <div className="container mx-auto px-4 py-8 flex-grow">
-        <div className="flex justify-between items-center mb-8">
-          <div className="flex items-center gap-4">
-            <img 
-              src="/lovable-uploads/90d8609f-9772-4686-b125-07b559255d75.png" 
-              alt="Tapir Logo" 
-              className="h-12 w-auto"
-            />
-            <h1 className="text-white font-bold uppercase text-[20px] tracking-[4px]">Tapir Money</h1>
-          </div>
+      <div className="container mx-auto px-4 flex-grow">
+        <div className="flex p-2 justify-between border-b border-gray-800 items-center mb-8">
+          <img src="/Logo.svg" alt="Logo" className="h-8 w-auto" />
           <WalletButton />
         </div>
 
         <Tabs defaultValue="staking" className="space-y-4">
-          <div className="flex items-center justify-between mb-6">
-            <Select 
-              value={selectedAsset}
-              onValueChange={handleAssetChange}
-            >
-              <SelectTrigger className="w-[300px] h-[60px] bg-tapir-card/50 border-purple-500/20 text-white hover:bg-tapir-card/70 focus:ring-purple-500/40 transition-all duration-200">
+          <div className="flex flex-col gap-4 md:flex-row items-center justify-between mb-6">
+            <Select value={selectedAsset} onValueChange={handleAssetChange}>
+              <SelectTrigger className="w-auto min-w-80 h-[60px] bg-tapir-card/50 border-purple-500/20 text-white hover:bg-tapir-card/70 focus:ring-purple-500/40 transition-all duration-200">
                 <SelectValue placeholder="Select an asset to stake" />
               </SelectTrigger>
               <SelectContent className="bg-tapir-card border-purple-500/20 animate-in fade-in-0 zoom-in-95 duration-200">
@@ -99,19 +89,19 @@ const Index = () => {
             </Select>
 
             <TabsList className="bg-tapir-card/50 border border-purple-500/20">
-              <TabsTrigger 
+              <TabsTrigger
                 value="staking"
                 className="data-[state=active]:bg-purple-500 data-[state=active]:text-white text-sm"
               >
                 Swap
               </TabsTrigger>
-              <TabsTrigger 
+              <TabsTrigger
                 value="lp"
                 className="data-[state=active]:bg-purple-500 data-[state=active]:text-white text-sm"
               >
                 Liquidity
               </TabsTrigger>
-              <TabsTrigger 
+              <TabsTrigger
                 value="advanced"
                 className="data-[state=active]:bg-purple-500 data-[state=active]:text-white text-sm"
               >
@@ -126,12 +116,12 @@ const Index = () => {
               <ApyGraph />
             </div>
           </TabsContent>
-          
+
           <TabsContent value="lp" className="space-y-4">
             <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-4">
               <div className="space-y-4">
-                <LPPosition 
-                  selectedAsset={selectedAsset} 
+                <LPPosition
+                  selectedAsset={selectedAsset}
                   onPoolSelect={setSelectedPool}
                   selectedPool={selectedPool}
                 />
@@ -143,17 +133,18 @@ const Index = () => {
               </div>
             </div>
           </TabsContent>
-          
+
           <TabsContent value="advanced">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <SplitControl />
-              <Card className="bg-tapir-card border-tapir-purple/20">
+              <Card className="bg-tapir-card border-purple-500/20">
                 <CardContent className="pt-6">
                   <div className="text-white space-y-4">
                     <h3 className="font-medium">About Splitting</h3>
                     <p className="text-gray-400 text-sm leading-relaxed">
-                      Splitting allows you to directly convert your ETH into both DP and YB tokens 
-                      in a single transaction. Use the slider to adjust the ratio between the two tokens.
+                      Splitting allows you to directly convert your ETH into
+                      both DP and YB tokens in a single transaction. Use the
+                      slider to adjust the ratio between the two tokens.
                     </p>
                     <ul className="text-sm text-gray-400 space-y-2 list-disc list-inside">
                       <li>DP (Depegging) tokens increase in value when USDT depegs</li>

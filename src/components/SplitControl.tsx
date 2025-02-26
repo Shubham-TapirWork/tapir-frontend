@@ -28,7 +28,7 @@ export const SplitControl = () => {
   };
 
   return (
-    <Card className="bg-tapir-card border-tapir-purple/20">
+    <Card className="bg-tapir-card border-purple-500/20">
       <CardHeader>
         <CardTitle className="text-white text-lg font-medium">Split ETH into DP and YB</CardTitle>
       </CardHeader>
@@ -65,7 +65,7 @@ export const SplitControl = () => {
                   <Input
                     value={dpAmount}
                     readOnly
-                    className="bg-tapir-dark/50 border-tapir-purple/20 text-white"
+                    className="bg-tapir-dark/50 border-purple-500/20 text-white"
                   />
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-400">
                     DP
@@ -78,7 +78,7 @@ export const SplitControl = () => {
                   <Input
                     value={ybAmount}
                     readOnly
-                    className="bg-tapir-dark/50 border-tapir-purple/20 text-white"
+                    className="bg-tapir-dark/50 border-purple-500/20 text-white"
                   />
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-400">
                     YB
@@ -92,7 +92,7 @@ export const SplitControl = () => {
         <Button 
           onClick={handleSplit}
           disabled={!ethAmount || Number(ethAmount) <= 0}
-          className="w-full bg-tapir-purple hover:bg-tapir-purple/90 text-white"
+          className="w-full bg-purple-500 hover:bg-purple-500/90 text-white"
         >
           Split ETH
         </Button>

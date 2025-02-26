@@ -34,20 +34,26 @@ export const EthInput = ({
                 <span className="ml-0.5 inline-block animate-[bounce_1s_infinite_0.2s]">.</span>
                 <span className="ml-0.5 inline-block animate-[bounce_1s_infinite_0.4s]">.</span>
               </span>
-            ) : (
-              `Balance: ${userBalance.displayValue} ${userBalance.symbol}`
-            )
+            ) : (`Balance: ${Number(userBalance.displayValue).toFixed(4)} ${userBalance.symbol}`)
           ) : ""}
         </span>
       </div>
       <Input
-        type="number"
+        type="text"
         placeholder="0.0"
         value={amount}
-        onChange={(e) => setAmount(e.target.value)}
+        onChange={(e) => {
+          const value = e.target.value.replace(/[^0-9.]/g, "");
+          // Only allow one decimal point
+          const parts = value.split('.');
+          const sanitizedValue = parts.length > 2 ? `${parts[0]}.${parts[1]}` : value;
+          setAmount(sanitizedValue);
+        }}
         className="bg-transparent border-purple-500/20 text-white pr-16"
         disabled={!isWalletConnected}
         step={0.001}
+        inputMode="decimal"
+        pattern="[0-9]*[.]?[0-9]*"
       />
       <button
         onClick={() => setAmount(userBalance.displayValue)}

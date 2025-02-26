@@ -41,7 +41,7 @@ export const PoolChart = ({ selectedPool }: PoolChartProps) => {
 
   if (!selectedPool) {
     return (
-      <Card className="bg-tapir-card border-tapir-purple/20 transition-all duration-300">
+      <Card className="bg-tapir-card border-purple-500/20 transition-all duration-300">
         <CardContent className="pt-6">
           <div className="flex flex-col items-center justify-center h-[400px] text-center space-y-4 animate-in fade-in-0 zoom-in-95 duration-300">
             <div className="text-gray-400">
@@ -59,8 +59,8 @@ export const PoolChart = ({ selectedPool }: PoolChartProps) => {
         <AreaChart data={data}>
           <defs>
             <linearGradient id="gradient-apr" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#9b87f5" stopOpacity={0.4} />
-              <stop offset="100%" stopColor="#9b87f5" stopOpacity={0} />
+              <stop offset="0%" stopColor="#a855f7" stopOpacity={0.4} />
+              <stop offset="100%" stopColor="#a855f7" stopOpacity={0} />
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" stroke="#2A2F3C" />
@@ -84,7 +84,7 @@ export const PoolChart = ({ selectedPool }: PoolChartProps) => {
           <Area
             type="monotone"
             dataKey="apr"
-            stroke="#9b87f5"
+            stroke="#a855f7"
             fill="url(#gradient-apr)"
           />
         </AreaChart>
@@ -119,7 +119,7 @@ export const PoolChart = ({ selectedPool }: PoolChartProps) => {
         />
         <Bar
           dataKey={metric}
-          fill="#9b87f5"
+          fill="#a855f7"
           opacity={0.8}
           radius={[4, 4, 0, 0]}
         />
@@ -128,7 +128,7 @@ export const PoolChart = ({ selectedPool }: PoolChartProps) => {
   };
 
   return (
-    <Card className="bg-tapir-card border-tapir-purple/20 transition-all duration-300 animate-in fade-in-0 zoom-in-95">
+    <Card className="bg-tapir-card border-purple-500/20 transition-all duration-300 animate-in fade-in-0 zoom-in-95">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
         <CardTitle className="text-white text-lg">Pool Analytics: {selectedPool.name}</CardTitle>
         <div className="flex gap-2">
@@ -138,8 +138,8 @@ export const PoolChart = ({ selectedPool }: PoolChartProps) => {
               onClick={() => setTimeframe(period as typeof timeframe)}
               className={`px-3 py-1 text-xs rounded-md transition-all duration-200 ${
                 timeframe === period
-                  ? "bg-tapir-purple text-white"
-                  : "text-gray-400 hover:bg-tapir-purple/20"
+                  ? "bg-purple-500 text-white"
+                  : "text-gray-400 hover:bg-purple-500/20"
               }`}
             >
               {period}
@@ -149,22 +149,22 @@ export const PoolChart = ({ selectedPool }: PoolChartProps) => {
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="fees" className="w-full">
-          <TabsList className="w-full bg-tapir-dark/50 border border-tapir-purple/20">
+          <TabsList className="w-full bg-tapir-dark/50 border border-purple-500/20">
             <TabsTrigger
               value="fees"
-              className="flex-1 data-[state=active]:bg-tapir-purple data-[state=active]:text-white"
+              className="flex-1 data-[state=active]:bg-purple-500 data-[state=active]:text-white"
             >
               Fees
             </TabsTrigger>
             <TabsTrigger
               value="volume"
-              className="flex-1 data-[state=active]:bg-tapir-purple data-[state=active]:text-white"
+              className="flex-1 data-[state=active]:bg-purple-500 data-[state=active]:text-white"
             >
               Volume
             </TabsTrigger>
             <TabsTrigger
               value="apr"
-              className="flex-1 data-[state=active]:bg-tapir-purple data-[state=active]:text-white"
+              className="flex-1 data-[state=active]:bg-purple-500 data-[state=active]:text-white"
             >
               APR
             </TabsTrigger>

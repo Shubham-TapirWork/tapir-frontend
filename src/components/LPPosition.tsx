@@ -113,21 +113,21 @@ export const LPPosition = ({ selectedAsset, onPoolSelect, selectedPool }: LPPosi
   }, [selectedAsset]);
 
   return (
-    <Card className="bg-tapir-card border-tapir-purple/20 hover:border-tapir-purple/40 transition-all duration-300 max-h-max">
+    <Card className="bg-tapir-card border-purple-500/20 hover:border-purple-500/40 transition-all duration-300 max-h-max">
       <CardHeader>
         <CardTitle className="text-white">Liquidity Pools</CardTitle>
       </CardHeader>
       <CardContent>
         {isLoading ? (
           <div className="animate-pulse space-y-4">
-            <div className="h-4 bg-tapir-purple/20 rounded w-3/4"></div>
-            <div className="h-4 bg-tapir-purple/20 rounded w-1/2"></div>
-            <div className="h-4 bg-tapir-purple/20 rounded w-2/3"></div>
+            <div className="h-4 bg-purple-500/20 rounded w-3/4"></div>
+            <div className="h-4 bg-purple-500/20 rounded w-1/2"></div>
+            <div className="h-4 bg-purple-500/20 rounded w-2/3"></div>
           </div>
         ) : (
           <Table>
             <TableHeader>
-              <TableRow className="hover:bg-tapir-purple/5 border-tapir-purple/20">
+              <TableRow className="hover:bg-purple-500/5 border-purple-500/20">
                 <TableHead className="text-gray-400 w-12">#</TableHead>
                 <TableHead className="text-gray-400">Pool</TableHead>
                 <TableHead className="text-right text-gray-400">
@@ -144,8 +144,8 @@ export const LPPosition = ({ selectedAsset, onPoolSelect, selectedPool }: LPPosi
               {pools.map((pool, index) => (
                 <TableRow 
                   key={pool.id} 
-                  className={`hover:bg-tapir-purple/5 border-tapir-purple/20 cursor-pointer transition-colors ${
-                    selectedPool?.id === pool.id ? 'bg-tapir-purple/10' : ''
+                  className={`hover:bg-purple-500/5 border-purple-500/20 cursor-pointer transition-colors ${
+                    selectedPool?.id === pool.id ? 'bg-purple-500/10' : ''
                   }`}
                   onClick={() => onPoolSelect(pool)}
                 >
@@ -162,7 +162,7 @@ export const LPPosition = ({ selectedAsset, onPoolSelect, selectedPool }: LPPosi
                         {pool.fee}
                       </div>
                       {index === 0 &&
-                        <span className="text-xs px-2 py-0.5 rounded bg-[#9b87f5]/10 text-[#9b87f5] font-medium">
+                        <span className="text-xs px-2 py-0.5 rounded bg-purple-500/10 text-purple-500 font-medium">
                           Active
                         </span>}
                     </div>
