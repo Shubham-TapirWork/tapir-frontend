@@ -6,7 +6,6 @@ import { ethers } from "ethers";
 interface StakeButtonProps {
   isWalletConnected: boolean;
   isStaking: boolean;
-  selectedStrategy: "safe" | "regular" | "boosted" | null;
   ethAmount: string;
   onStake: () => void;
 }
@@ -14,7 +13,6 @@ interface StakeButtonProps {
 export const StakeButton = ({
   isWalletConnected,
   isStaking,
-  selectedStrategy,
   ethAmount,
   onStake
 }: StakeButtonProps) => {
@@ -41,17 +39,6 @@ export const StakeButton = ({
         className="w-full bg-purple-500 hover:opacity-90 text-white"
       >
         Connect Wallet
-      </Button>
-    );
-  }
-
-  if (!selectedStrategy) {
-    return (
-      <Button
-        disabled={true}
-        className="w-full bg-purple-500 hover:opacity-90 text-white"
-      >
-        Select a Strategy Above
       </Button>
     );
   }

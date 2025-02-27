@@ -5,20 +5,20 @@ import { useActiveAccount } from "thirdweb/react";
 import { useState } from "react";
 import { client } from "@/client";
 
-interface UseWithdrawProps {
+interface UseSellProps {
   onSuccess?: () => void;
 }
 
-export const useWithdraw = ({ onSuccess }: UseWithdrawProps = {}) => {
+export const useSelling = ({ onSuccess }: UseSellProps = {}) => {
   const account = useActiveAccount();
-  const [isWithdrawing, setIsWithdrawing] = useState(false);
+  const [isSelling, setIsSelling] = useState(false);
   const contract = getContract({
     client,
     chain: defineChain(11155111),
     address: contracts.liquidityPoolContract.address,
   });
 
-  const handleWithdraw = async (tethAmount: string) => {
+  const handleOrder = async (tethAmount: string) => {
     if (!account) {
       toast.error("Please connect your wallet");
       return;
@@ -29,7 +29,7 @@ export const useWithdraw = ({ onSuccess }: UseWithdrawProps = {}) => {
       return;
     }
 
-    setIsWithdrawing(true);
+    setIsSelling(true);
     try {
       toast.info("Transaction submitted. Waiting for confirmation...");
 
@@ -43,16 +43,16 @@ export const useWithdraw = ({ onSuccess }: UseWithdrawProps = {}) => {
         transaction,
         account,
       });
-      console.log("Withdrawal transaction sent:", transactionHash);
-      toast.success("Successfully withdrawn ETH!");
+      console.log("Swap transaction sent:", transactionHash);
+      toast.success("Successfully sold!");
       onSuccess?.();
     } catch (error: any) {
-      console.error("Withdrawal failed:", error);
-      toast.error(error.message || "Failed to withdraw ETH");
+      console.error("Swap failed:", error);
+      toast.error(error.message || "Failed to sell tokens!");
     } finally {
-      setIsWithdrawing(false);
+      setIsSelling(false);
     }
   };
 
-  return { handleWithdraw, isWithdrawing };
+  return { handleOrder, isSelling };
 };

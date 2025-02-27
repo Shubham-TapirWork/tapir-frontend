@@ -4,9 +4,9 @@ import { Coins } from "lucide-react";
 import { useState } from "react";
 import { EthInput } from "./EthInput";
 import { StakingInfo } from "./StakingInfo";
-import { useWithdraw } from "@/hooks/useWithdraw";
+import { useSelling } from "@/hooks/useSell";
 
-interface WithdrawCardProps {
+interface SellCardProps {
   isWalletConnected: boolean;
   userBalance: {
     value: bigint;
@@ -19,22 +19,27 @@ interface WithdrawCardProps {
   selectedStrategy: "safe" | "regular" | "boosted" | null;
 }
 
-export const WithdrawCard = ({
+export const SellCard = ({
   isWalletConnected,
   userBalance,
   isLoadingBalance,
   selectedStrategy
-}: WithdrawCardProps) => {
+}: SellCardProps) => {
   const [tethAmount, setTethAmount] = useState("");
 
-  const { handleWithdraw, isWithdrawing } = useWithdraw();
+  const { handleOrder, isSelling } = useSelling();
+
+  const getAssetDescription = () => {
+    if (!selectedStrategy) return "";
+    return `${selectedStrategy.charAt(0).toUpperCase()}${selectedStrategy.slice(1)}`;
+  };
 
   return (
     <Card className="bg-tapir-card border-purple-500/20 hover:border-purple-500/40 transition-all duration-300">
       <CardHeader>
         <CardTitle className="text-white flex items-center gap-2">
           <Coins className="h-5 w-5 text-purple-500" />
-          Withdraw {userBalance?.symbol}
+          Sell {selectedStrategy && <span className="text-tapir-purple font-normal text-sm">• { getAssetDescription() }</span>}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -48,16 +53,28 @@ export const WithdrawCard = ({
           />
 
           <Button
-            onClick={() => handleWithdraw(tethAmount)}
-            disabled={!isWalletConnected || isWithdrawing || parseFloat(userBalance.displayValue) <= 0}
+            onClick={() => handleOrder(tethAmount)}
+            disabled={!isWalletConnected || isSelling || parseFloat(userBalance.displayValue) <= 0}
             className="w-full bg-purple-500 hover:opacity-90 text-white"
           >
-            {isWithdrawing ? (
+            {!isWalletConnected &&
+              <>
+                Connect Wallet
+              </>
+            }
+
+            {parseFloat(userBalance.displayValue) <= 0 &&
+              <>
+                Insufficient Amount
+              </>
+            }
+
+            {isSelling &&
               <>
                 <span className="animate-spin mr-2">◌</span>
-                Withdrawing...
+                Swap in progress...
               </>
-            ) : "Sell"}
+            }
           </Button>
 
           <StakingInfo

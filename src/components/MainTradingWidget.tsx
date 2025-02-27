@@ -3,12 +3,12 @@ import { StakingCard } from "./StakingCard";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StakeCard } from "./StakeCard";
-import { WithdrawCard } from "./WithdrawCard";
+import { SellCard } from "./SellCard";
 import { useActiveAccount, useWalletBalance, useActiveWalletChain } from "thirdweb/react";
 import contracts from "@/contracts/contracts.json";
 import { client } from "@/client";
 
-export const StethStaking = () => {
+export const MainTradeWidget = () => {
   const [selectedStrategy, setSelectedStrategy] = useState<"safe" | "regular" | "boosted" | null>(null);
 
   // Get connected wallet address
@@ -42,19 +42,19 @@ export const StethStaking = () => {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        {/* <StakingCard
-          title="Safe Staking"
-          description="Lower risk, stable returns"
-          apy="4.20%"
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <StakingCard
+          title="Regular Token"
+          description="Pendle asset"
+          apy="4.15%"
           type="regular"
           isSelected={selectedStrategy === "regular"}
           onSelect={() => handleStrategySelect("regular")}
           disabled={!isWalletConnected}
-        /> */}
+        />
         <StakingCard
-          title="DP_token"
-          description="Depeg-protected asset"
+          title="DP Token"
+          description="Depeg-protected"
           apy="8.15%"
           type="safe"
           isSelected={selectedStrategy === "safe"}
@@ -62,8 +62,8 @@ export const StethStaking = () => {
           disabled={!isWalletConnected}
         />
         <StakingCard
-          title="YB_token"
-          description="Yield-boosted asset"
+          title="YB Token"
+          description="Yield-boosted"
           apy="12.50%"
           type="boosted"
           isSelected={selectedStrategy === "boosted"}
@@ -72,23 +72,23 @@ export const StethStaking = () => {
         />
       </div>
 
-      <Tabs defaultValue="stake" className="w-full">
+      <Tabs defaultValue="buy" className="w-full">
         <TabsList className="w-full bg-tapir-card/50 border border-purple-500/20">
           <TabsTrigger 
-            value="stake" 
+            value="buy" 
             className="flex-1 data-[state=active]:bg-purple-500 data-[state=active]:text-white"
           >
             Buy
           </TabsTrigger>
           <TabsTrigger 
-            value="withdraw" 
+            value="sell" 
             className="flex-1 data-[state=active]:bg-purple-500 data-[state=active]:text-white"
           >
             Sell
           </TabsTrigger>
         </TabsList>
         
-        <TabsContent value="stake">
+        <TabsContent value="buy">
           <StakeCard
             isWalletConnected={isWalletConnected}
             userBalance={ethBalance}
@@ -97,8 +97,8 @@ export const StethStaking = () => {
           />
         </TabsContent>
         
-        <TabsContent value="withdraw">
-          <WithdrawCard
+        <TabsContent value="sell">
+          <SellCard
             isWalletConnected={isWalletConnected}
             userBalance={tethBalance}
             isLoadingBalance={isLoadingTethBalance}

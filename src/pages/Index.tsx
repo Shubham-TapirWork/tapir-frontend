@@ -1,5 +1,5 @@
 import { WalletButton } from "@/components/WalletButton";
-import { StethStaking } from "@/components/StethStaking";
+import { MainTradeWidget } from "@/components/MainTradingWidget";
 import { ApyGraph } from "@/components/ApyGraph";
 import { Twitter } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -112,7 +112,7 @@ const Index = () => {
 
           <TabsContent value="staking" className="space-y-4">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              <StethStaking />
+              <MainTradeWidget />
               <ApyGraph />
             </div>
           </TabsContent>

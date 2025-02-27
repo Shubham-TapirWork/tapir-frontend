@@ -33,6 +33,11 @@ export const StakeCard = ({
   const [ethAmount, setEthAmount] = useState("");
   const [isStaking, setIsStaking] = useState(false);
 
+  const getAssetDescription = () => {
+    if (!selectedStrategy) return "";
+    return `${selectedStrategy.charAt(0).toUpperCase()}${selectedStrategy.slice(1)}`;
+  };
+
   const account = useActiveAccount();
   const amountInWei = ethAmount ? parseEther(ethAmount) : parseEther("0");
 
@@ -136,7 +141,7 @@ export const StakeCard = ({
       <CardHeader>
         <CardTitle className="text-white flex items-center gap-2">
           <Coins className="h-5 w-5 text-purple-500" />
-          Buy
+          Buy {selectedStrategy && <span className="text-tapir-purple font-normal text-sm">• { getAssetDescription() }</span>}
         </CardTitle>
       </CardHeader>
       <CardContent>
