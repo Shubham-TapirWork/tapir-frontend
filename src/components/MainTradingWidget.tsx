@@ -25,11 +25,11 @@ export const MainTradeWidget = () => {
   });
 
   // Get tETH token balance
-  const { data: tethBalance, isLoading: isLoadingTethBalance, isError: isErrorTokenBalance } = useWalletBalance({
+  const { data: dpBalance, isLoading: isLoadingTethBalance, isError: isErrorTokenBalance } = useWalletBalance({
     chain: activeChain,
     address: account?.address,
     client,
-    tokenAddress: contracts.tethContract.address
+    tokenAddress: contracts.dpContract.address
   });
 
   const handleStrategySelect = (strategy: "safe" | "regular" | "boosted") => {
@@ -100,7 +100,7 @@ export const MainTradeWidget = () => {
         <TabsContent value="sell">
           <SellCard
             isWalletConnected={isWalletConnected}
-            userBalance={tethBalance}
+            userBalance={dpBalance}
             isLoadingBalance={isLoadingTethBalance}
             selectedStrategy={selectedStrategy}
           />
