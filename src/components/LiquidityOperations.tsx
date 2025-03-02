@@ -1,14 +1,15 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ethers } from "ethers";
 import { toast } from "sonner";
-import { getLPPoolContract } from "@/lib/contracts";
-import { getMetaMaskProvider } from "@/lib/wallet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
+import { useActiveAccount } from "thirdweb/react";
+import { defineChain, getContract, prepareContractCall, sendTransaction } from "thirdweb";
+import { client } from "@/client";
+import { parseEther } from "ethers";
+import contracts from "@/contracts/contracts.json";
 
 interface PoolData {
   id: number;
@@ -31,6 +32,14 @@ export const LiquidityOperations = ({ selectedPool }: LiquidityOperationsProps) 
   const [percentage, setPercentage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
+  const account = useActiveAccount();
+
+  const contract = getContract({
+    client,
+    chain: defineChain(11155111),
+    address: contracts.stableSwapContract.address,
+  });
+
   const handleSliderChange = (value: number[]) => {
     setPercentage(value[0]);
     // TODO: Update shares based on user's total LP position * percentage
@@ -45,29 +54,26 @@ export const LiquidityOperations = ({ selectedPool }: LiquidityOperationsProps) 
 
     setIsLoading(true);
     try {
-      const provider = getMetaMaskProvider();
-      if (!provider) {
-        toast.error("Please connect your wallet");
-        return;
-      }
-
-      const signer = await new ethers.BrowserProvider(provider).getSigner();
-      const lpContract = getLPPoolContract();
-      if (!lpContract) return;
-
-      const contractWithSigner = lpContract.connect(signer);
-      
       const amounts = [
-        ethers.parseEther(amount0),
-        ethers.parseEther(amount1)
+        parseEther(amount0),
+        parseEther(amount1)
       ] as [bigint, bigint];
       
       const minShares = 0n;
 
-      const tx = await contractWithSigner.addLiquidity(amounts, minShares);
+      const transaction = prepareContractCall({
+        contract,
+        method: "function addLiquidity(uint256[2] calldata amounts, uint256 minShares) returns (uint256)",
+        params: [amounts, minShares],
+      });
+
       toast.info("Adding liquidity...");
       
-      await tx.wait();
+      const { transactionHash } = await sendTransaction({
+        transaction,
+        account,
+      });
+
       toast.success("Successfully added liquidity!");
       
       setAmount0("");
@@ -88,25 +94,22 @@ export const LiquidityOperations = ({ selectedPool }: LiquidityOperationsProps) 
 
     setIsLoading(true);
     try {
-      const provider = getMetaMaskProvider();
-      if (!provider) {
-        toast.error("Please connect your wallet");
-        return;
-      }
-
-      const signer = await new ethers.BrowserProvider(provider).getSigner();
-      const lpContract = getLPPoolContract();
-      if (!lpContract) return;
-
-      const contractWithSigner = lpContract.connect(signer);
-      
-      const shareAmount = ethers.parseEther(shares);
+      const shareAmount = parseEther(shares);
       const minAmounts = [0n, 0n] as [bigint, bigint];
 
-      const tx = await contractWithSigner.removeLiquidity(shareAmount, minAmounts);
+      const transaction = prepareContractCall({
+        contract,
+        method: "function removeLiquidity(uint256 shares, uint256[2] calldata minAmounts) returns (uint256[2])",
+        params: [shareAmount, minAmounts],
+      });
+
       toast.info("Removing liquidity...");
       
-      await tx.wait();
+      const { transactionHash } = await sendTransaction({
+        transaction,
+        account,
+      });
+
       toast.success("Successfully removed liquidity!");
       
       setShares("");
