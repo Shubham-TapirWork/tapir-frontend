@@ -24,12 +24,28 @@ export const MainTradeWidget = () => {
     client,
   });
 
+  // Get tEth token balance
+  const { data: tEthBalance, isLoading: isLoadingtEthBalance, isError: isErrortEthTokenBalance } = useWalletBalance({
+    chain: activeChain,
+    address: account?.address,
+    client,
+    tokenAddress: contracts.tethContract.address
+  });
+
   // Get DP token balance
-  const { data: dpBalance, isLoading: isLoadingTethBalance, isError: isErrorTokenBalance } = useWalletBalance({
+  const { data: dpBalance, isLoading: isLoadingdpBalance, isError: isErrordpTokenBalance } = useWalletBalance({
     chain: activeChain,
     address: account?.address,
     client,
     tokenAddress: contracts.dpContract.address
+  });
+
+  // Get YB token balance
+  const { data: ybBalance, isLoading: isLoadingybBalance, isError: isErrorybTokenBalance } = useWalletBalance({
+    chain: activeChain,
+    address: account?.address,
+    client,
+    tokenAddress: contracts.ybContract.address
   });
 
   const handleStrategySelect = (strategy: "safe" | "regular" | "boosted") => {
@@ -39,6 +55,19 @@ export const MainTradeWidget = () => {
     }
     setSelectedStrategy(strategy);
   };
+
+  const getBalanceForStrategy = () => {
+    switch (selectedStrategy) {
+      case "safe":
+        return { balance: dpBalance, isLoading: isLoadingdpBalance };
+      case "boosted":
+        return { balance: ybBalance, isLoading: isLoadingybBalance };
+      default:
+        return { balance: tEthBalance, isLoading: isLoadingtEthBalance };
+    }
+  };
+
+  const { balance: selectedBalance, isLoading: selectedIsLoading } = getBalanceForStrategy();
 
   return (
     <div className="space-y-6">
@@ -100,8 +129,8 @@ export const MainTradeWidget = () => {
         <TabsContent value="sell">
           <SellCard
             isWalletConnected={isWalletConnected}
-            userBalance={dpBalance}
-            isLoadingBalance={isLoadingTethBalance}
+            userBalance={selectedBalance}
+            isLoadingBalance={selectedIsLoading}
             selectedStrategy={selectedStrategy}
           />
         </TabsContent>

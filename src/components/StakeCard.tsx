@@ -141,7 +141,7 @@ export const StakeCard = ({
       <CardHeader>
         <CardTitle className="text-white flex items-center gap-2">
           <Coins className="h-5 w-5 text-purple-500" />
-          Buy {selectedStrategy && <span className="text-tapir-purple font-normal text-sm">• { getAssetDescription() }</span>}
+          Buy {selectedStrategy && <span className="text-tapir-purple font-normal text-sm">• {getAssetDescription()}</span>}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -156,7 +156,6 @@ export const StakeCard = ({
 
           <StakeButton
             isWalletConnected={isWalletConnected}
-            selectedStrategy={selectedStrategy}
             ethAmount={ethAmount}
             isStaking={isStaking}
             onStake={handleStake}
