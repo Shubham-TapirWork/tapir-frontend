@@ -24,7 +24,7 @@ export const MainTradeWidget = () => {
     client,
   });
 
-  // Get tETH token balance
+  // Get DP token balance
   const { data: dpBalance, isLoading: isLoadingTethBalance, isError: isErrorTokenBalance } = useWalletBalance({
     chain: activeChain,
     address: account?.address,

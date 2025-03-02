@@ -54,7 +54,7 @@ export const SellCard = ({
 
           <Button
             onClick={() => handleOrder(tethAmount)}
-            disabled={!isWalletConnected || isSelling || parseFloat(userBalance.displayValue) <= 0}
+            disabled={!isWalletConnected || isSelling || parseFloat(userBalance?.displayValue) <= 0}
             className="w-full bg-purple-500 hover:opacity-90 text-white"
           >
             {!isWalletConnected &&
@@ -63,7 +63,7 @@ export const SellCard = ({
               </>
             }
 
-            {parseFloat(userBalance.displayValue) <= 0 &&
+            {parseFloat(userBalance?.displayValue) <= 0 &&
               <>
                 Insufficient Amount
               </>
@@ -73,6 +73,12 @@ export const SellCard = ({
               <>
                 <span className="animate-spin mr-2">◌</span>
                 Swap in progress...
+              </>
+            }
+
+            {isWalletConnected && parseFloat(userBalance?.displayValue) > 0 && !isSelling &&
+              <>
+                Sell
               </>
             }
           </Button>
