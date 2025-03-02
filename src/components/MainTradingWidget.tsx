@@ -9,7 +9,7 @@ import contracts from "@/contracts/contracts.json";
 import { client } from "@/client";
 
 export const MainTradeWidget = () => {
-  const [selectedStrategy, setSelectedStrategy] = useState<"safe" | "regular" | "boosted" | null>(null);
+  const [selectedStrategy, setSelectedStrategy] = useState<"safe" | "regular" | "boosted">("regular");
 
   // Get connected wallet address
   const account = useActiveAccount();
@@ -83,7 +83,7 @@ export const MainTradeWidget = () => {
         />
         <StakingCard
           title="DP Token"
-          description="Depeg-protected"
+          description="Depeg Protected"
           apy="8.15%"
           type="safe"
           isSelected={selectedStrategy === "safe"}
@@ -92,7 +92,7 @@ export const MainTradeWidget = () => {
         />
         <StakingCard
           title="YB Token"
-          description="Yield-boosted"
+          description="Yield Boosted"
           apy="12.50%"
           type="boosted"
           isSelected={selectedStrategy === "boosted"}

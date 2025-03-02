@@ -18,17 +18,17 @@ interface StakingCardProps {
   disabled?: boolean;
 }
 
-export const StakingCard = ({ 
-  title, 
-  description, 
-  apy, 
+export const StakingCard = ({
+  title,
+  description,
+  apy,
   type,
   isSelected,
   onSelect,
-  disabled
+  disabled,
 }: StakingCardProps) => {
   return (
-    <Card 
+    <Card
       onClick={onSelect}
       className={cn(
         "bg-tapir-card border-purple-500/20 hover:border-purple-500/40 transition-all duration-300",
@@ -47,17 +47,17 @@ export const StakingCard = ({
             <span className="flex-1">{title}</span>
             <span className="text-gray-400 text-xs">{description}</span>
           </div>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Info className="h-6 w-6 text-gray-400 hover:text-gray-300 cursor-help" />
-              </TooltipTrigger>
-              <TooltipContent>
-                <p className="text-sm">{description}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
         </CardTitle>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Info className="h-4 w-4 text-gray-400 hover:text-gray-300 cursor-help" />
+            </TooltipTrigger>
+            <TooltipContent>
+              <p className="text-sm">{description}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </CardHeader>
       <CardContent className="p-3 pt-0">
         <div className="flex justify-between items-center">
