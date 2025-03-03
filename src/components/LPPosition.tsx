@@ -1,9 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { getLPPoolContract } from "@/lib/contracts";
-import { getMetaMaskProvider } from "@/lib/wallet";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ethers } from "ethers";
 import {
   Table,
   TableBody,
