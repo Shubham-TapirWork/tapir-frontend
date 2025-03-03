@@ -24,7 +24,7 @@ interface PoolData {
   fee: string;
 }
 
-const POOL_DATA: Record<string, PoolData[]> = {
+export const POOL_DATA: Record<string, PoolData[]> = {
   ethereum: [
     {
       id: 1,

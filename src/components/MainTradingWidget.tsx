@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { StakingCard } from "./StakingCard";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -7,9 +6,11 @@ import { SellCard } from "./SellCard";
 import { useActiveAccount, useWalletBalance, useActiveWalletChain } from "thirdweb/react";
 import contracts from "@/contracts/contracts.json";
 import { client } from "@/client";
+import { useSearchParams } from "react-router-dom";
 
 export const MainTradeWidget = () => {
-  const [selectedStrategy, setSelectedStrategy] = useState<"safe" | "regular" | "boosted">("regular");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const selectedStrategy = (searchParams.get("strategy") as "safe" | "regular" | "boosted") || "regular";
 
   // Get connected wallet address
   const account = useActiveAccount();
@@ -53,7 +54,9 @@ export const MainTradeWidget = () => {
       toast.error("Please connect your wallet first");
       return;
     }
-    setSelectedStrategy(strategy);
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('strategy', strategy);
+    setSearchParams(newParams);
   };
 
   const getBalanceForStrategy = () => {
