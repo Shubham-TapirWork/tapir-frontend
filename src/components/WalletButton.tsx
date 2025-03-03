@@ -1,5 +1,6 @@
 import { ConnectButton, darkTheme } from "thirdweb/react";
 import { createWallet, walletConnect } from "thirdweb/wallets";
+import { defineChain } from "thirdweb";
 
 // Constants
 import { client } from "@/client";

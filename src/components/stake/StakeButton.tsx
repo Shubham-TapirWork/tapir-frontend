@@ -1,7 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { useTokenAllowance } from "@/hooks/useTokenAllowance";
-import { useApprove } from "@/hooks/useApprove";
-import { ethers } from "ethers";
 
 interface StakeButtonProps {
   isWalletConnected: boolean;
@@ -16,22 +13,6 @@ export const StakeButton = ({
   ethAmount,
   onStake
 }: StakeButtonProps) => {
-  const { allowance, isCheckingAllowance, checkAllowance } = useTokenAllowance(isWalletConnected);
-  
-  const { handleApprove, isApproving } = useApprove({
-    onSuccess: checkAllowance
-  });
-
-  const needsApproval = () => {
-    if (!ethAmount) return false;
-    try {
-      const amountInWei = ethers.parseEther(ethAmount);
-      return allowance < amountInWei;
-    } catch {
-      return false;
-    }
-  };
-
   if (!isWalletConnected) {
     return (
       <Button
@@ -43,27 +24,10 @@ export const StakeButton = ({
     );
   }
 
-  if (needsApproval()) {
-    return (
-      <Button
-        onClick={() => handleApprove(ethAmount)}
-        disabled={isApproving || isCheckingAllowance}
-        className="w-full bg-purple-500 hover:opacity-90 text-white"
-      >
-        {isApproving ? (
-          <>
-            <span className="animate-spin mr-2">◌</span>
-            Approving...
-          </>
-        ) : "Approve ETH"}
-      </Button>
-    );
-  }
-
   return (
     <Button
       onClick={onStake}
-      disabled={isStaking || isCheckingAllowance}
+      disabled={isStaking}
       className="w-full bg-purple-500 hover:opacity-90 text-white"
     >
       {isStaking ? (

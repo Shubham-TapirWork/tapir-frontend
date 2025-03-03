@@ -9,7 +9,7 @@ import contracts from "@/contracts/contracts.json";
 import { client } from "@/client";
 
 export const MainTradeWidget = () => {
-  const [selectedStrategy, setSelectedStrategy] = useState<"safe" | "regular" | "boosted" | null>(null);
+  const [selectedStrategy, setSelectedStrategy] = useState<"safe" | "regular" | "boosted">("regular");
 
   // Get connected wallet address
   const account = useActiveAccount();
@@ -24,12 +24,28 @@ export const MainTradeWidget = () => {
     client,
   });
 
-  // Get tETH token balance
-  const { data: tethBalance, isLoading: isLoadingTethBalance, isError: isErrorTokenBalance } = useWalletBalance({
+  // Get tEth token balance
+  const { data: tEthBalance, isLoading: isLoadingtEthBalance, isError: isErrortEthTokenBalance } = useWalletBalance({
     chain: activeChain,
     address: account?.address,
     client,
     tokenAddress: contracts.tethContract.address
+  });
+
+  // Get DP token balance
+  const { data: dpBalance, isLoading: isLoadingdpBalance, isError: isErrordpTokenBalance } = useWalletBalance({
+    chain: activeChain,
+    address: account?.address,
+    client,
+    tokenAddress: contracts.dpContract.address
+  });
+
+  // Get YB token balance
+  const { data: ybBalance, isLoading: isLoadingybBalance, isError: isErrorybTokenBalance } = useWalletBalance({
+    chain: activeChain,
+    address: account?.address,
+    client,
+    tokenAddress: contracts.ybContract.address
   });
 
   const handleStrategySelect = (strategy: "safe" | "regular" | "boosted") => {
@@ -39,6 +55,19 @@ export const MainTradeWidget = () => {
     }
     setSelectedStrategy(strategy);
   };
+
+  const getBalanceForStrategy = () => {
+    switch (selectedStrategy) {
+      case "safe":
+        return { balance: dpBalance, isLoading: isLoadingdpBalance };
+      case "boosted":
+        return { balance: ybBalance, isLoading: isLoadingybBalance };
+      default:
+        return { balance: tEthBalance, isLoading: isLoadingtEthBalance };
+    }
+  };
+
+  const { balance: selectedBalance, isLoading: selectedIsLoading } = getBalanceForStrategy();
 
   return (
     <div className="space-y-6">
@@ -54,7 +83,7 @@ export const MainTradeWidget = () => {
         />
         <StakingCard
           title="DP Token"
-          description="Depeg-protected"
+          description="Depeg Protected"
           apy="8.15%"
           type="safe"
           isSelected={selectedStrategy === "safe"}
@@ -63,7 +92,7 @@ export const MainTradeWidget = () => {
         />
         <StakingCard
           title="YB Token"
-          description="Yield-boosted"
+          description="Yield Boosted"
           apy="12.50%"
           type="boosted"
           isSelected={selectedStrategy === "boosted"}
@@ -100,8 +129,8 @@ export const MainTradeWidget = () => {
         <TabsContent value="sell">
           <SellCard
             isWalletConnected={isWalletConnected}
-            userBalance={tethBalance}
-            isLoadingBalance={isLoadingTethBalance}
+            userBalance={selectedBalance}
+            isLoadingBalance={selectedIsLoading}
             selectedStrategy={selectedStrategy}
           />
         </TabsContent>

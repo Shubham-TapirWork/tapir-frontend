@@ -35,7 +35,16 @@ export const StakeCard = ({
 
   const getAssetDescription = () => {
     if (!selectedStrategy) return "";
-    return `${selectedStrategy.charAt(0).toUpperCase()}${selectedStrategy.slice(1)}`;
+    switch (selectedStrategy) {
+      case "safe":
+        return "Depeg Protected Asset";
+      case "regular":
+        return "tEth";
+      case "boosted":
+        return "Yield Boosted Asset";
+      default:
+        return "";
+    }
   };
 
   const account = useActiveAccount();
@@ -141,7 +150,7 @@ export const StakeCard = ({
       <CardHeader>
         <CardTitle className="text-white flex items-center gap-2">
           <Coins className="h-5 w-5 text-purple-500" />
-          Buy {selectedStrategy && <span className="text-tapir-purple font-normal text-sm">• { getAssetDescription() }</span>}
+          Buy {selectedStrategy && getAssetDescription()}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -156,7 +165,6 @@ export const StakeCard = ({
 
           <StakeButton
             isWalletConnected={isWalletConnected}
-            selectedStrategy={selectedStrategy}
             ethAmount={ethAmount}
             isStaking={isStaking}
             onStake={handleStake}
