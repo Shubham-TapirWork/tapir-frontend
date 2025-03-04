@@ -10,8 +10,9 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react(),
-    mode === 'development',
-  ].filter(Boolean),
+    // Only include development-specific plugins when in dev mode
+    ...(mode === 'development' ? [] : []),
+  ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
