@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { parseEther } from "ethers";
-import { defineChain, getContract, prepareContractCall, sendTransaction } from "thirdweb";
+import { defineChain, encode, getContract, prepareContractCall, sendAndConfirmTransaction } from "thirdweb";
 import { useActiveAccount, useActiveWalletChain, useWalletBalance } from "thirdweb/react";
+import { multicall } from "thirdweb/extensions/common";
 import { client } from "@/client";
 import contracts from "@/contracts/contracts.json";
 
@@ -80,13 +81,16 @@ export const SplitControl = () => {
       setIsSplitting(true);
       toast.info("Splitting ETH...");
 
-      const { transactionHash: getDPETHtransactionHash } = await sendTransaction({
-        transaction: getDPETH,
-        account,
+      const getDPETHencoded = await encode(getDPETH);
+      const getYBETHencoded = await encode(getYBETH);
+
+      const transaction = multicall({
+        contract,
+        data: [getDPETHencoded, getYBETHencoded],
       });
 
-      const { transactionHash: getYBETHtransactionHash } = await sendTransaction({
-        transaction: getYBETH,
+      await sendAndConfirmTransaction({
+        transaction,
         account,
       });
 
