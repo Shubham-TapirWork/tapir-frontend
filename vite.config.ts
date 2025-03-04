@@ -10,8 +10,7 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react(),
-    // Only include development-specific plugins when in dev mode
-    ...(mode === 'development' ? [] : []),
+    ...(mode === 'development' ? [] : [])
   ],
   resolve: {
     alias: {

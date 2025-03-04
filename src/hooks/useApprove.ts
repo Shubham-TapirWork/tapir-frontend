@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { getLiquidityPoolContract, getTethContract } from "@/lib/contracts";
-import { getMetaMaskProvider } from "@/lib/wallet";
-import { ethers } from "ethers";
+import { defineChain, getContract, prepareContractCall, sendTransaction } from "thirdweb";
+import { useActiveAccount } from "thirdweb/react";
 import { toast } from "sonner";
-import { IERC20 } from "@/lib/types/contracts";
+import { client } from "@/client";
+import contracts from "@/contracts/contracts.json";
 
 interface UseApproveProps {
   onSuccess?: () => void;
@@ -11,36 +11,49 @@ interface UseApproveProps {
 
 export const useApprove = ({ onSuccess }: UseApproveProps = {}) => {
   const [isApproving, setIsApproving] = useState(false);
+  const account = useActiveAccount();
+
+  const tethContract = getContract({
+    client,
+    chain: defineChain(11155111),
+    address: contracts.tethContract.address,
+  });
+
+  const liquidityPoolContract = getContract({
+    client,
+    chain: defineChain(11155111),
+    address: contracts.liquidityPoolContract.address,
+  });
 
   const handleApprove = async (tethAmount: string) => {
+    if (!account) {
+      toast.error("Please connect your wallet");
+      return false;
+    }
+
     if (!tethAmount || parseFloat(tethAmount) <= 0) {
       toast.error("Please enter a valid amount");
-      return;
+      return false;
     }
 
     setIsApproving(true);
     try {
-      const tethContract = await getTethContract();
-      const liquidityPoolContract = await getLiquidityPoolContract();
+      const amountInWei = BigInt(Math.floor(parseFloat(tethAmount) * 1e18));
       
-      if (!tethContract || !liquidityPoolContract) {
-        throw new Error("Failed to get contracts");
-      }
+      const transaction = await prepareContractCall({
+        contract: tethContract,
+        method: "function approve(address spender, uint256 amount) returns (bool)",
+        params: [liquidityPoolContract.address, amountInWei],
+      });
 
-      const provider = getMetaMaskProvider();
-      const ethersProvider = new ethers.BrowserProvider(provider);
-      const signer = await ethersProvider.getSigner();
-      
-      const tethContractWithSigner = tethContract.connect(signer) as IERC20;
-      const amountInWei = ethers.parseEther(tethAmount);
-      
-      const approveTx = await tethContractWithSigner.approve(
-        liquidityPoolContract.target.toString(),
-        amountInWei
-      );
-      
       toast.info("Approving tETH transfer...");
-      await approveTx.wait();
+      
+      const { transactionHash } = await sendTransaction({
+        transaction,
+        account,
+      });
+
+      console.log("Approval transaction sent:", transactionHash);
       toast.success("Successfully approved tETH!");
       
       onSuccess?.();

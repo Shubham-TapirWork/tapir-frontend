@@ -1,12 +1,6 @@
 import { WalletButton } from "@/components/WalletButton";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface NavbarProps {
   selectedAsset: string;
