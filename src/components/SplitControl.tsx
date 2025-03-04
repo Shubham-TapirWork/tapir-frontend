@@ -126,7 +126,7 @@ export const SplitControl = () => {
                 max={100}
                 step={1}
                 className="py-4"
-                disabled={isSplitting}
+                disabled={true}
               />
             </div>
 
