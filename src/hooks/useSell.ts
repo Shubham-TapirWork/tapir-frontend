@@ -1,6 +1,6 @@
 import { toast } from "sonner";
 import contracts from "@/contracts/contracts.json";
-import { defineChain, getContract, prepareContractCall, sendTransaction } from "thirdweb";
+import { defineChain, getContract, prepareContractCall, sendAndConfirmTransaction } from "thirdweb";
 import { useActiveAccount } from "thirdweb/react";
 import { useState } from "react";
 import { client } from "@/client";
@@ -39,7 +39,7 @@ export const useSelling = ({ onSuccess }: UseSellProps = {}) => {
         method: "function withdraw(address _recipient, uint256 _amount) returns (uint256)",
         params: [account.address, amountInWei],
       });
-      const { transactionHash } = await sendTransaction({
+      const { transactionHash } = await sendAndConfirmTransaction({
         transaction,
         account,
       });

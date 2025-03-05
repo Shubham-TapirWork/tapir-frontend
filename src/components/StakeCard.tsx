@@ -4,7 +4,7 @@ import { toast } from "sonner";
 
 import { parseEther } from "ethers";
 import { useActiveAccount } from "thirdweb/react";
-import { defineChain, getContract, prepareContractCall, sendTransaction } from "thirdweb";
+import { defineChain, getContract, prepareContractCall, sendAndConfirmTransaction } from "thirdweb";
 import { client } from "@/client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -107,7 +107,7 @@ export const StakeCard = ({
 
       switch (selectedStrategy) {
         case "regular": {
-          const { transactionHash } = await sendTransaction({
+          const { transactionHash } = await sendAndConfirmTransaction({
             transaction,
             account,
           });
@@ -115,7 +115,7 @@ export const StakeCard = ({
         }
 
         case "safe": {
-          const { transactionHash } = await sendTransaction({
+          const { transactionHash } = await sendAndConfirmTransaction({
             transaction: safeTransaction,
             account,
           });
@@ -123,7 +123,7 @@ export const StakeCard = ({
         }
 
         case "boosted": {
-          const { transactionHash } = await sendTransaction({
+          const { transactionHash } = await sendAndConfirmTransaction({
             transaction: boostedTransaction,
             account,
           });

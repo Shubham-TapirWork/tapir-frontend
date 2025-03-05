@@ -1,20 +1,17 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { parseEther } from "ethers";
-import { defineChain, encode, getContract, prepareContractCall, sendAndConfirmTransaction } from "thirdweb";
+import { defineChain, getContract, prepareContractCall, sendAndConfirmTransaction } from "thirdweb";
 import { useActiveAccount, useActiveWalletChain, useWalletBalance } from "thirdweb/react";
-import { multicall } from "thirdweb/extensions/common";
 import { client } from "@/client";
 import contracts from "@/contracts/contracts.json";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { EthInput } from "@/components/EthInput";
 
 export const SplitControl = () => {
   const [ethAmount, setEthAmount] = useState("");
-  const [splitRatio, setSplitRatio] = useState([50]); // Single value representing DP percentage
   const [isSplitting, setIsSplitting] = useState(false);
 
   // Get connected wallet address
@@ -28,28 +25,17 @@ export const SplitControl = () => {
     client,
   });
 
-  // Calculate token amounts based on split ratio
-  const dpAmount = ethAmount ? (Number(ethAmount) * splitRatio[0] / 100) : "0";
-  const ybAmount = ethAmount ? (Number(ethAmount) * (100 - splitRatio[0]) / 100) : "0";
-
   const contract = getContract({
     client,
     chain: defineChain(11155111),
-    address: contracts.liquidityPoolContract.address,
+    address: contracts.depegPoolContract.address,
   });
 
-  const getDPETH = prepareContractCall({
+  const transaction = prepareContractCall({
     contract,
-    method: "function getDPwtETHForETH(address _depegPoolAddress, address _stableSwap, address _ybAddress, address _dpAddress) payable",
-    params: [contracts.depegPoolContract.address, contracts.stableSwapContract.address, contracts.ybContract.address, contracts.dpContract.address],
-    value: parseEther(dpAmount.toString()),
-  });
-
-  const getYBETH = prepareContractCall({
-    contract,
-    method: "function getYBwtETHForETH(address _depegPoolAddress, address _stableSwap, address _ybAddress, address _dpAddress) payable",
-    params: [contracts.depegPoolContract.address, contracts.stableSwapContract.address, contracts.ybContract.address, contracts.dpContract.address],
-    value: parseEther(ybAmount.toString()),
+    method: "function splitToken(uint256 _amount)",
+    params: [parseEther(ethAmount || "0")],
+    value: parseEther(ethAmount || "0"),
   });
 
   const validateInput = (amount: string): boolean => {
@@ -73,21 +59,12 @@ export const SplitControl = () => {
     return true;
   };
 
-  // TODO: Batch getDPETH and getYBETH calls into single transaction
   const handleSplit = async () => {
     if (!validateInput(ethAmount)) return;
 
     try {
       setIsSplitting(true);
       toast.info("Splitting ETH...");
-
-      const getDPETHencoded = await encode(getDPETH);
-      const getYBETHencoded = await encode(getYBETH);
-
-      const transaction = multicall({
-        contract,
-        data: [getDPETHencoded, getYBETHencoded],
-      });
 
       await sendAndConfirmTransaction({
         transaction,
@@ -119,29 +96,19 @@ export const SplitControl = () => {
           />
 
           <div className="space-y-6 pt-4">
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-sm text-gray-400">
-                <span>Split ratio</span>
-                <span>{splitRatio[0]}% DP - {100 - splitRatio[0]}% YB</span>
-              </div>
-              <Slider
-                value={splitRatio}
-                onValueChange={setSplitRatio}
-                max={100}
-                step={1}
-                className="py-4"
-                disabled={isSplitting}
-              />
+            <div className="flex items-center justify-between text-sm text-gray-400">
+              <span>Split ratio</span>
+              <span>50% DP - 50% YB</span>
             </div>
 
             <div className="space-y-2">
               <label className="text-base text-white">You'll get:</label>
               <div className="grid grid-cols-2">
                 <label className="text-sm text-gray-400">
-                  DP Amount: {dpAmount} DP
+                  DP Amount: {Number(ethAmount) / 2} DP
                 </label>
                 <label className="text-sm text-gray-400">
-                  YB Amount: {ybAmount} YB
+                  YB Amount: {Number(ethAmount) / 2} YB
                 </label>
               </div>
             </div>

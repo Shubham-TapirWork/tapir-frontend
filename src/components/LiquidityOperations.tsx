@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { useActiveAccount } from "thirdweb/react";
-import { defineChain, getContract, prepareContractCall, sendTransaction } from "thirdweb";
+import { defineChain, getContract, prepareContractCall, sendAndConfirmTransaction } from "thirdweb";
 import { client } from "@/client";
 import { parseEther } from "ethers";
 import contracts from "@/contracts/contracts.json";
@@ -69,7 +69,7 @@ export const LiquidityOperations = ({ selectedPool }: LiquidityOperationsProps) 
 
       toast.info("Adding liquidity...");
       
-      const { transactionHash } = await sendTransaction({
+      const { transactionHash } = await sendAndConfirmTransaction({
         transaction,
         account,
       });
@@ -105,7 +105,7 @@ export const LiquidityOperations = ({ selectedPool }: LiquidityOperationsProps) 
 
       toast.info("Removing liquidity...");
       
-      const { transactionHash } = await sendTransaction({
+      const { transactionHash } = await sendAndConfirmTransaction({
         transaction,
         account,
       });
