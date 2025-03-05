@@ -6,10 +6,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { useActiveAccount } from "thirdweb/react";
-import { defineChain, getContract, prepareContractCall, sendTransaction } from "thirdweb";
+import { defineChain, getContract, prepareContractCall, sendAndConfirmTransaction } from "thirdweb";
 import { client } from "@/client";
 import { parseEther } from "ethers";
 import contracts from "@/contracts/contracts.json";
+import { useSearchParams } from "react-router-dom";
 
 interface PoolData {
   id: number;
@@ -69,7 +70,7 @@ export const LiquidityOperations = ({ selectedPool }: LiquidityOperationsProps) 
 
       toast.info("Adding liquidity...");
       
-      const { transactionHash } = await sendTransaction({
+      const { transactionHash } = await sendAndConfirmTransaction({
         transaction,
         account,
       });
@@ -105,7 +106,7 @@ export const LiquidityOperations = ({ selectedPool }: LiquidityOperationsProps) 
 
       toast.info("Removing liquidity...");
       
-      const { transactionHash } = await sendTransaction({
+      const { transactionHash } = await sendAndConfirmTransaction({
         transaction,
         account,
       });
@@ -120,6 +121,15 @@ export const LiquidityOperations = ({ selectedPool }: LiquidityOperationsProps) 
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const selectedTab = searchParams.get("liquidityTab") || "add";
+
+  const handleTabChange = (value: string) => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('liquidityTab', value);
+    setSearchParams(newParams);
   };
 
   if (!selectedPool) {
@@ -148,7 +158,7 @@ export const LiquidityOperations = ({ selectedPool }: LiquidityOperationsProps) 
             Fee: {selectedPool.fee} • APR: {selectedPool.apr}
           </div>
         </div>
-        <Tabs defaultValue="add" className="w-full">
+        <Tabs value={selectedTab} onValueChange={handleTabChange} className="w-full">
           <TabsList className="w-full bg-tapir-dark/50 border border-purple-500/20 animate-in fade-in-0 slide-in-from-right-3 duration-500">
             <TabsTrigger 
               value="add" 
