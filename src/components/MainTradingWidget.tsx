@@ -11,6 +11,7 @@ import { useSearchParams } from "react-router-dom";
 export const MainTradeWidget = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedStrategy = (searchParams.get("strategy") as "safe" | "regular" | "boosted") || "regular";
+  const selectedTab = searchParams.get("swapTab") || "buy";
 
   // Get connected wallet address
   const account = useActiveAccount();
@@ -72,6 +73,12 @@ export const MainTradeWidget = () => {
 
   const { balance: selectedBalance, isLoading: selectedIsLoading } = getBalanceForStrategy();
 
+  const handleTabChange = (value: string) => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('swapTab', value);
+    setSearchParams(newParams);
+  };
+
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -104,7 +111,7 @@ export const MainTradeWidget = () => {
         />
       </div>
 
-      <Tabs defaultValue="buy" className="w-full">
+      <Tabs value={selectedTab} onValueChange={handleTabChange} className="w-full">
         <TabsList className="w-full bg-tapir-card/50 border border-purple-500/20">
           <TabsTrigger 
             value="buy" 
