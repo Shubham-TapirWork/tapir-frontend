@@ -59,13 +59,9 @@ export const Navbar = ({ selectedAsset, onAssetChange }: NavbarProps) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    let isMounted = true;
-
     const fetchAssetCategories = async () => {
       try {
         const data = await graphqlClient.request<GraphQLResponse>(GET_ASSET_CATEGORIES);
-        if (!isMounted) return;
-
         const transformedCategories = data.assetCategories.map(category => ({
           ...category,
           value: category.name.toLowerCase(),
@@ -74,17 +70,13 @@ export const Navbar = ({ selectedAsset, onAssetChange }: NavbarProps) => {
         
         setAssetCategories(transformedCategories);
       } catch (error) {
-        if (!isMounted) return;
         console.error('Error fetching asset categories:', error);
       } finally {
-        if (isMounted) {
-          setIsLoading(false);
-        }
+        setIsLoading(false);
       }
     };
 
     fetchAssetCategories();
-    return () => { isMounted = false; }
   }, []);
 
   const getNavigationPath = (path: string) => {
