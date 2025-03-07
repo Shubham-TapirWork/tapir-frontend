@@ -21,6 +21,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "ethers": "^6.9.0",
+    "graphql-request": "^7.1.2",
     "highcharts": "^12.1.2",
     "highcharts-react-official": "^3.2.1",
     "lucide-react": "^0.462.0",
