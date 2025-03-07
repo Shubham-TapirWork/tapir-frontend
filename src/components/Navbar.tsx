@@ -57,7 +57,6 @@ export const Navbar = ({ selectedAsset, onAssetChange }: NavbarProps) => {
   const [searchParams] = useSearchParams();
   const [assetCategories, setAssetCategories] = useState<AssetCategory[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -74,11 +73,9 @@ export const Navbar = ({ selectedAsset, onAssetChange }: NavbarProps) => {
         }));
         
         setAssetCategories(transformedCategories);
-        setError(null);
       } catch (error) {
         if (!isMounted) return;
         console.error('Error fetching asset categories:', error);
-        setError('Failed to load asset categories');
       } finally {
         if (isMounted) {
           setIsLoading(false);
