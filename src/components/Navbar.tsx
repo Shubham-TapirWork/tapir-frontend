@@ -1,5 +1,9 @@
-import { WalletButton } from "@/components/WalletButton";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
+
+import { graphqlClient, GET_ASSET_CATEGORIES } from "@/lib/graphql";
+
+import { WalletButton } from "@/components/WalletButton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface NavbarProps {
@@ -7,9 +11,73 @@ interface NavbarProps {
   onAssetChange: (value: string) => void;
 }
 
+interface AssetCategory {
+  id: string;
+  value: string;
+  name: string;
+  description: string;
+  icon: string;
+  iconColor: string;
+  iconBackground: string;
+}
+
+interface GraphQLResponse {
+  assetCategories: {
+    id: string;
+    name: string;
+    description: string;
+  }[];
+}
+
+const getAssetStyles = (id: string) => {
+  switch (id) {
+    case 'bitcoin':
+      return {
+        icon: '₿',
+        iconColor: 'text-orange-500',
+        iconBackground: 'bg-orange-500/20'
+      };
+    case 'ethereum':
+      return {
+        icon: 'Ξ',
+        iconColor: 'text-blue-500',
+        iconBackground: 'bg-blue-500/20'
+      };
+    default:
+      return {
+        icon: '$',
+        iconColor: 'text-green-500',
+        iconBackground: 'bg-green-500/20'
+      };
+  }
+};
+
 export const Navbar = ({ selectedAsset, onAssetChange }: NavbarProps) => {
   const location = useLocation();
   const [searchParams] = useSearchParams();
+  const [assetCategories, setAssetCategories] = useState<AssetCategory[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAssetCategories = async () => {
+      try {
+        const data = await graphqlClient.request<GraphQLResponse>(GET_ASSET_CATEGORIES);
+        const transformedCategories = data.assetCategories.map(category => ({
+          ...category,
+          value: category.name.toLowerCase(),
+          ...getAssetStyles(category.id)
+        }));
+        
+        setAssetCategories(transformedCategories);
+      } catch (error) {
+        console.error('Error fetching asset categories:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAssetCategories();
+  }, []);
 
   const getNavigationPath = (path: string) => {
     const newParams = new URLSearchParams(searchParams);
@@ -27,50 +95,27 @@ export const Navbar = ({ selectedAsset, onAssetChange }: NavbarProps) => {
               <SelectValue placeholder="Select an asset to stake" />
             </SelectTrigger>
             <SelectContent className="bg-tapir-card border-purple-500/20 animate-in fade-in-0 zoom-in-95 duration-200">
-              <SelectItem
-                value="stablecoin"
-                className="text-white hover:bg-purple-500/20 focus:bg-purple-500/30 py-3 cursor-pointer"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center shrink-0">
-                    <span className="text-green-500 text-xl">$</span>
-                  </div>
-                  <div className="flex flex-col items-start">
-                    <div className="font-medium text-base">Stablecoin</div>
-                    <div className="text-sm text-gray-400">
-                      Earn yield on USDC, USDT, or DAI
+              {isLoading ? (
+                <div className="p-4 text-center text-gray-400">Loading...</div>
+              ) : (
+                assetCategories.map((category) => (
+                  <SelectItem
+                    key={category.id}
+                    value={category.value}
+                    className="text-white hover:bg-purple-500/20 focus:bg-purple-500/30 py-3 cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-10 h-10 rounded-full ${category.iconBackground} flex items-center justify-center shrink-0`}>
+                        <span className={`${category.iconColor} text-xl`}>{category.icon}</span>
+                      </div>
+                      <div className="flex flex-col items-start">
+                        <div className="font-medium text-base">{category.name}</div>
+                        <div className="text-sm text-gray-400">{category.description}</div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </SelectItem>
-              <SelectItem
-                value="bitcoin"
-                className="text-white hover:bg-purple-500/20 focus:bg-purple-500/30 py-3 cursor-pointer"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center shrink-0">
-                    <span className="text-orange-500 text-xl">₿</span>
-                  </div>
-                  <div className="flex flex-col items-start">
-                    <div className="font-medium text-base">Bitcoin</div>
-                    <div className="text-sm text-gray-400">BTC or wBTC</div>
-                  </div>
-                </div>
-              </SelectItem>
-              <SelectItem
-                value="ethereum"
-                className="text-white hover:bg-purple-500/20 focus:bg-purple-500/30 py-3 cursor-pointer"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center shrink-0">
-                    <span className="text-blue-500 text-xl">Ξ</span>
-                  </div>
-                  <div className="flex flex-col items-start">
-                    <div className="font-medium text-base">Ethereum</div>
-                    <div className="text-sm text-gray-400">ETH or wETH</div>
-                  </div>
-                </div>
-              </SelectItem>
+                  </SelectItem>
+                ))
+              )}
             </SelectContent>
           </Select>
           <nav className="hidden md:flex items-center gap-6">
