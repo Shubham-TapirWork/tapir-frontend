@@ -1,159 +1,22 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { useState, useMemo } from "react";
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import { useState, useEffect, useMemo, useCallback } from "react";
 
-interface PendleData {
-  timestamp: number;
-  maxApy: number;
-  baseApy: number;
-  tvl: number;
-}
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
-const usePendleData = (timeframe: string) => {
-  const [data, setData] = useState<PendleData[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+import { usePendleData } from "@/hooks/usePendleData";
 
-  const [cachedData, setCachedData] = useState<Record<string, PendleData[]>>({});
-
-  const fetchData = useCallback(async () => {
-    if (cachedData[timeframe]) {
-      setData(cachedData[timeframe]);
-      return;
-    }
-
-    setIsLoading(true);
-    setError(null);
-    try {
-      const chainId = '1';
-      const marketAddress = '0xb451a36c8b6b2eac77ad0737ba732818143a0e25';
-
-      const now = new Date();
-      let startDate = new Date(now);
-      let timeFrameParam: string;
-
-      switch (timeframe) {
-        case '1h':
-          startDate.setHours(now.getHours() - 72);
-          timeFrameParam = 'hour';
-          break;
-        case '1d':
-          startDate.setDate(now.getDate() - 60);
-          timeFrameParam = 'day';
-          break;
-        default:
-          startDate.setDate(now.getDate() - 180);
-          timeFrameParam = 'week';
-      }
-
-      const url = new URL(`https://api-v2.pendle.finance/bff/v1/${chainId}/markets/${marketAddress}/stat-history`);
-      url.searchParams.append('time_frame', timeFrameParam);
-      url.searchParams.append('timestamp_start', startDate.toISOString());
-      url.searchParams.append('timestamp_end', now.toISOString());
-
-      const response = await fetch(url);
-      const jsonData = await response.json();
-      const parsedData = parsePendleData(jsonData.results);
-      
-      // Update cache and current data
-      setCachedData(prev => ({ ...prev, [timeframe]: parsedData }));
-      setData(parsedData);
-    } catch (error) {
-      setError(error instanceof Error ? error.message : 'Failed to fetch data');
-      console.error('Error fetching Pendle data:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [timeframe, cachedData]);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
-  return { data, isLoading, error };
-};
-
-const parsePendleData = (csvData: string): PendleData[] => {
-  const lines = csvData.trim().split('\n');
-  return lines.slice(1).map(line => {
-    const [timestamp, maxApy, baseApy, tvl] = line.split(',').map(Number);
-    return {
-      timestamp,
-      maxApy: maxApy * 100,
-      baseApy: baseApy * 100,
-      tvl
-    };
-  });
-};
-
-const formatDate = (timestamp: number, timeframe: string): string => {
-  const date = new Date(timestamp * 1000);
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-
-  switch (timeframe) {
-    case '1h':
-      return `${month}/${day} ${hours}:${minutes}`;
-    case '1d':
-      return `${month}/${day}`;
-    default:
-      return `${date.getFullYear()}/${month}/${day}`;
-  }
-};
-
-const baseChartOptions: Partial<Highcharts.Options> = {
-  chart: {
-    type: 'line',
-    backgroundColor: 'transparent',
-    style: {
-      fontFamily: 'inherit'
-    }
-  },
-  title: {
-    text: undefined
-  },
-  legend: {
-    itemStyle: {
-      color: '#fff'
-    }
-  },
-  tooltip: {
-    shared: true,
-    useHTML: true,
-    headerFormat: '<div style="font-size: 12px; font-weight: bold; padding-bottom: 5px">{point.key}</div>',
-    pointFormatter: function() {
-      if (this.series.name === 'TVL') {
-        return `<div style="color: ${this.color}">${this.series.name}: $${(this.y / 1000000).toFixed(2)}M</div>`;
-      }
-      return `<div style="color: ${this.color}">${this.series.name}: ${this.y.toFixed(2)}%</div>`;
-    },
-    backgroundColor: '#1A1F2C',
-    borderColor: 'rgba(155, 135, 245, 0.2)',
-    borderRadius: 8,
-    padding: 12,
-    style: {
-      color: '#fff'
-    }
-  },
-  plotOptions: {
-    line: {
-      marker: {
-        enabled: false
-      }
-    }
-  },
-  credits: {
-    enabled: false
-  }
-};
+import { formatDate } from "@/lib/pendle";
+import { baseChartOptions } from "@/lib/chart-config";
 
 export const ApyGraph = () => {
   const [timeframe, setTimeframe] = useState<"1h" | "1d" | "1w">("1w");
-  const { data, isLoading, error } = usePendleData(timeframe);
+  const { data, isLoading, error } = usePendleData({
+    timeframe,
+    chainId: '1',
+    marketAddress: '0xb451a36c8b6b2eac77ad0737ba732818143a0e25'
+  });
 
   const chartOptions = useMemo((): Highcharts.Options => ({
     ...baseChartOptions,
