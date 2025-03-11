@@ -2,26 +2,66 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const generateData = () => {
-  const data = [];
-  const date = new Date();
-  for (let i = 30; i >= 0; i--) {
-    date.setDate(date.getDate() - i);
-    data.push({
-      date: date.toISOString().split('T')[0],
-      safeApy: 4 + Math.random(), // Random APY around 4-5%
-      regularApy: 7 + Math.random() * 2, // Random APY around 7-9%
-      boostedApy: 11 + Math.random() * 3, // Random APY around 11-14%
-    });
+interface PendleData {
+  timestamp: number;
+  maxApy: number;
+  baseApy: number;
+  tvl: number;
+}
+
+const parsePendleData = (csvData: string): PendleData[] => {
+  const lines = csvData.trim().split('\n');
+  return lines.slice(1).map(line => {
+    const [timestamp, maxApy, baseApy, tvl] = line.split(',').map(Number);
+    return {
+      timestamp,
+      maxApy: maxApy * 100, // Convert to percentage
+      baseApy: baseApy * 100,
+      tvl
+    };
+  });
+};
+
+const formatDate = (timestamp: number, timeframe: string): string => {
+  const date = new Date(timestamp * 1000);
+  if (timeframe === '1h') {
+    return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+  } else if (timeframe === '1d') {
+    return `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:00`;
+  } else {
+    return `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}`;
   }
-  return data;
 };
 
 export const ApyGraph = () => {
-  const [timeframe, setTimeframe] = useState<"1W" | "1M" | "3M" | "1Y">("1M");
-  const data = generateData();
+  const [timeframe, setTimeframe] = useState<"1h" | "1d" | "1w">("1w");
+  const [data, setData] = useState<PendleData[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let url;
+        if (timeframe === '1h') {
+          url = 'https://api-v2.pendle.finance/bff/v1/1/markets/0xb451a36c8b6b2eac77ad0737ba732818143a0e25/stat-history?time_frame=hour&timestamp_start=2024-12-10T11:00:00.000Z&timestamp_end=2025-03-10T10:00:00.000Z';
+        } else if (timeframe === '1d') {
+          url = 'https://api-v2.pendle.finance/bff/v1/1/markets/0xb451a36c8b6b2eac77ad0737ba732818143a0e25/stat-history?time_frame=day&timestamp_start=2024-12-11T00:00:00.000Z&timestamp_end=2025-03-10T00:00:00.000Z';
+        } else {
+          url = 'https://api-v2.pendle.finance/bff/v1/1/markets/0xb451a36c8b6b2eac77ad0737ba732818143a0e25/stat-history?time_frame=week&timestamp_start=2024-12-16T00:00:00.000Z&timestamp_end=2025-03-10T00:00:00.000Z';
+        }
+        
+        const response = await fetch(url);
+        const jsonData = await response.json();
+        const parsedData = parsePendleData(jsonData.results);
+        setData(parsedData);
+      } catch (error) {
+        console.error('Error fetching Pendle data:', error);
+      }
+    };
+
+    fetchData();
+  }, [timeframe]);
 
   const options: Highcharts.Options = {
     chart: {
@@ -35,41 +75,78 @@ export const ApyGraph = () => {
       text: undefined
     },
     xAxis: {
-      categories: data.map(item => item.date.split('-').slice(1).join('/')),
+      categories: data.map(item => formatDate(item.timestamp, timeframe)),
       labels: {
         style: {
           color: '#666'
-        }
+        },
+        rotation: timeframe === '1h' ? -45 : 0
       },
       lineColor: '#666',
-      tickColor: '#666'
+      tickColor: '#666',
+      tickInterval: timeframe === '1h' ? 4 : 1
     },
-    yAxis: {
-      title: {
-        text: undefined
-      },
-      labels: {
-        formatter: function() {
-          return this.value + '%';
+    yAxis: [
+      {
+        title: {
+          text: 'APY',
+          style: {
+            color: '#9b87f5'
+          }
         },
-        style: {
-          color: '#666'
-        }
+        labels: {
+          formatter: function() {
+            return this.value + '%';
+          },
+          style: {
+            color: '#666'
+          }
+        },
+        gridLineColor: 'rgba(102, 102, 102, 0.2)',
+        softMin: Math.min(...data.map(item => Math.min(item.baseApy, item.maxApy))) * 0.9,
+        softMax: Math.max(...data.map(item => Math.max(item.baseApy, item.maxApy))) * 1.1
       },
-      gridLineColor: 'rgba(102, 102, 102, 0.2)'
-    },
+      {
+        title: {
+          text: 'TVL',
+          style: {
+            color: '#4CAF50'
+          }
+        },
+        labels: {
+          formatter: function(this: Highcharts.AxisLabelsFormatterContextObject) {
+            return '$' + (Number(this.value) / 1000000).toFixed(1) + 'M';
+          },
+          style: {
+            color: '#666'
+          }
+        },
+        opposite: true,
+        gridLineWidth: 0
+      }
+    ],
     series: [
       {
-        name: 'DP',
-        data: data.map(item => item.regularApy),
+        name: 'Base APY',
+        data: data.map(item => item.baseApy),
         color: '#9b87f5',
-        type: 'line'
+        type: 'line',
+        yAxis: 0
       },
       {
-        name: 'YB',
-        data: data.map(item => item.boostedApy),
+        name: 'Max APY',
+        data: data.map(item => item.maxApy),
         color: '#7E69AB',
-        type: 'line'
+        type: 'line',
+        yAxis: 0
+      },
+      {
+        name: 'TVL',
+        data: data.map(item => item.tvl),
+        color: '#4CAF50',
+        type: 'line',
+        yAxis: 1,
+        dashStyle: 'ShortDot'
       }
     ],
     legend: {
@@ -79,13 +156,6 @@ export const ApyGraph = () => {
     },
     tooltip: {
       shared: true,
-      formatter: function(this: any): string {
-        if (!this.points) return '';
-        
-        return this.points.reduce((s: string, point: any) => {
-          return s + `<br/><span style="color:${point.color}">\u25CF</span> ${point.series.name}: <b>${point.y?.toFixed(2)}%</b>`;
-        }, `<b>${this.x}</b>`);
-      }
     },
     plotOptions: {
       line: {
@@ -104,7 +174,7 @@ export const ApyGraph = () => {
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
         <CardTitle className="text-white">Historical APY</CardTitle>
         <div className="flex gap-2 text-white hover:text-white">
-          {["1W", "1M", "3M", "1Y"].map((period) => (
+          {["1h", "1d", "1w"].map((period) => (
             <Button
               key={period}
               variant={timeframe === period ? "secondary" : "ghost"}
@@ -122,10 +192,10 @@ export const ApyGraph = () => {
         </div>
       </CardHeader>
       <CardContent>
-          <HighchartsReact
-            highcharts={Highcharts}
-            options={options}
-          />
+        <HighchartsReact
+          highcharts={Highcharts}
+          options={options}
+        />
       </CardContent>
     </Card>
   );
