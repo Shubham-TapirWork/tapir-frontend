@@ -62,7 +62,7 @@ export const POOL_DATA: Record<string, PoolData[]> = {
       fee: "0.3%"
     }
   ],
-  stablecoin: [
+  stable: [
     {
       id: 1,
       name: "USDC/USDT",
