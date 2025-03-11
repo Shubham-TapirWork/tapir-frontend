@@ -24,11 +24,11 @@ export const ApyGraph = () => {
       categories: data.map(item => formatDate(item.timestamp, timeframe)),
       labels: {
         style: { color: '#666' },
-        rotation: timeframe === '1h' ? -45 : 0
+        rotation: 0
       },
       lineColor: '#666',
       tickColor: '#666',
-      tickInterval: timeframe === '1h' ? 4 : 1
+      tickInterval: timeframe === '1w' ? 5 : timeframe === '1h' ? 16 : 8
     },
     yAxis: [
       {
