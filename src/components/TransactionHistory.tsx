@@ -101,7 +101,7 @@ export const TransactionHistory = ({ selectedPool }: TransactionHistoryProps) =>
     <Card className="bg-tapir-card border-purple-500/20">
       <CardContent className="pt-6">
         <div className="mb-6">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex flex-col md:flex-row items-center justify-between mb-4 gap-4">
             <h3 className="text-white font-medium">Transactions</h3>
             <div className="flex items-center gap-4">
               <Select 

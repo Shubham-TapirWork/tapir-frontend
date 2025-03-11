@@ -34,7 +34,7 @@ export const EthInput = ({
                 <span className="ml-0.5 inline-block animate-[bounce_1s_infinite_0.2s]">.</span>
                 <span className="ml-0.5 inline-block animate-[bounce_1s_infinite_0.4s]">.</span>
               </span>
-            ) : (`Balance: ${Number(userBalance.displayValue).toFixed(4)} ${userBalance.symbol}`)
+            ) : (`Balance: ${Number(userBalance?.displayValue).toFixed(4)} ${userBalance?.symbol}`)
           ) : ""}
         </span>
       </div>
@@ -56,7 +56,7 @@ export const EthInput = ({
         pattern="[0-9]*[.]?[0-9]*"
       />
       <button
-        onClick={() => setAmount(userBalance.displayValue)}
+        onClick={() => setAmount(userBalance?.displayValue)}
         className="absolute right-3 top-[70%] -translate-y-1/2 text-xs font-medium text-white cursor-pointer disabled:cursor-not-allowed disabled:opacity-80 hover:opacity-80 transition-all duration-300"
         disabled={!isWalletConnected}
       >
