@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 
 interface PendleData {
   timestamp: number;
@@ -11,13 +11,77 @@ interface PendleData {
   tvl: number;
 }
 
+const usePendleData = (timeframe: string) => {
+  const [data, setData] = useState<PendleData[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const [cachedData, setCachedData] = useState<Record<string, PendleData[]>>({});
+
+  const fetchData = useCallback(async () => {
+    if (cachedData[timeframe]) {
+      setData(cachedData[timeframe]);
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+    try {
+      const chainId = '1';
+      const marketAddress = '0xb451a36c8b6b2eac77ad0737ba732818143a0e25';
+
+      const now = new Date();
+      let startDate = new Date(now);
+      let timeFrameParam: string;
+
+      switch (timeframe) {
+        case '1h':
+          startDate.setHours(now.getHours() - 72);
+          timeFrameParam = 'hour';
+          break;
+        case '1d':
+          startDate.setDate(now.getDate() - 60);
+          timeFrameParam = 'day';
+          break;
+        default:
+          startDate.setDate(now.getDate() - 180);
+          timeFrameParam = 'week';
+      }
+
+      const url = new URL(`https://api-v2.pendle.finance/bff/v1/${chainId}/markets/${marketAddress}/stat-history`);
+      url.searchParams.append('time_frame', timeFrameParam);
+      url.searchParams.append('timestamp_start', startDate.toISOString());
+      url.searchParams.append('timestamp_end', now.toISOString());
+
+      const response = await fetch(url);
+      const jsonData = await response.json();
+      const parsedData = parsePendleData(jsonData.results);
+      
+      // Update cache and current data
+      setCachedData(prev => ({ ...prev, [timeframe]: parsedData }));
+      setData(parsedData);
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Failed to fetch data');
+      console.error('Error fetching Pendle data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [timeframe, cachedData]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  return { data, isLoading, error };
+};
+
 const parsePendleData = (csvData: string): PendleData[] => {
   const lines = csvData.trim().split('\n');
   return lines.slice(1).map(line => {
     const [timestamp, maxApy, baseApy, tvl] = line.split(',').map(Number);
     return {
       timestamp,
-      maxApy: maxApy * 100, // Convert to percentage
+      maxApy: maxApy * 100,
       baseApy: baseApy * 100,
       tvl
     };
@@ -26,60 +90,77 @@ const parsePendleData = (csvData: string): PendleData[] => {
 
 const formatDate = (timestamp: number, timeframe: string): string => {
   const date = new Date(timestamp * 1000);
-  if (timeframe === '1h') {
-    return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
-  } else if (timeframe === '1d') {
-    return `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:00`;
-  } else {
-    return `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}`;
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+
+  switch (timeframe) {
+    case '1h':
+      return `${month}/${day} ${hours}:${minutes}`;
+    case '1d':
+      return `${month}/${day}`;
+    default:
+      return `${date.getFullYear()}/${month}/${day}`;
+  }
+};
+
+const baseChartOptions: Partial<Highcharts.Options> = {
+  chart: {
+    type: 'line',
+    backgroundColor: 'transparent',
+    style: {
+      fontFamily: 'inherit'
+    }
+  },
+  title: {
+    text: undefined
+  },
+  legend: {
+    itemStyle: {
+      color: '#fff'
+    }
+  },
+  tooltip: {
+    shared: true,
+    useHTML: true,
+    headerFormat: '<div style="font-size: 12px; font-weight: bold; padding-bottom: 5px">{point.key}</div>',
+    pointFormatter: function() {
+      if (this.series.name === 'TVL') {
+        return `<div style="color: ${this.color}">${this.series.name}: $${(this.y / 1000000).toFixed(2)}M</div>`;
+      }
+      return `<div style="color: ${this.color}">${this.series.name}: ${this.y.toFixed(2)}%</div>`;
+    },
+    backgroundColor: '#1A1F2C',
+    borderColor: 'rgba(155, 135, 245, 0.2)',
+    borderRadius: 8,
+    padding: 12,
+    style: {
+      color: '#fff'
+    }
+  },
+  plotOptions: {
+    line: {
+      marker: {
+        enabled: false
+      }
+    }
+  },
+  credits: {
+    enabled: false
   }
 };
 
 export const ApyGraph = () => {
   const [timeframe, setTimeframe] = useState<"1h" | "1d" | "1w">("1w");
-  const [data, setData] = useState<PendleData[]>([]);
+  const { data, isLoading, error } = usePendleData(timeframe);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        let url;
-        if (timeframe === '1h') {
-          url = 'https://api-v2.pendle.finance/bff/v1/1/markets/0xb451a36c8b6b2eac77ad0737ba732818143a0e25/stat-history?time_frame=hour&timestamp_start=2024-12-10T11:00:00.000Z&timestamp_end=2025-03-10T10:00:00.000Z';
-        } else if (timeframe === '1d') {
-          url = 'https://api-v2.pendle.finance/bff/v1/1/markets/0xb451a36c8b6b2eac77ad0737ba732818143a0e25/stat-history?time_frame=day&timestamp_start=2024-12-11T00:00:00.000Z&timestamp_end=2025-03-10T00:00:00.000Z';
-        } else {
-          url = 'https://api-v2.pendle.finance/bff/v1/1/markets/0xb451a36c8b6b2eac77ad0737ba732818143a0e25/stat-history?time_frame=week&timestamp_start=2024-12-16T00:00:00.000Z&timestamp_end=2025-03-10T00:00:00.000Z';
-        }
-        
-        const response = await fetch(url);
-        const jsonData = await response.json();
-        const parsedData = parsePendleData(jsonData.results);
-        setData(parsedData);
-      } catch (error) {
-        console.error('Error fetching Pendle data:', error);
-      }
-    };
-
-    fetchData();
-  }, [timeframe]);
-
-  const options: Highcharts.Options = {
-    chart: {
-      type: 'line',
-      backgroundColor: 'transparent',
-      style: {
-        fontFamily: 'inherit'
-      }
-    },
-    title: {
-      text: undefined
-    },
+  const chartOptions = useMemo((): Highcharts.Options => ({
+    ...baseChartOptions,
     xAxis: {
       categories: data.map(item => formatDate(item.timestamp, timeframe)),
       labels: {
-        style: {
-          color: '#666'
-        },
+        style: { color: '#666' },
         rotation: timeframe === '1h' ? -45 : 0
       },
       lineColor: '#666',
@@ -90,17 +171,13 @@ export const ApyGraph = () => {
       {
         title: {
           text: 'APY',
-          style: {
-            color: '#9b87f5'
-          }
+          style: { color: '#9b87f5' }
         },
         labels: {
           formatter: function() {
             return this.value + '%';
           },
-          style: {
-            color: '#666'
-          }
+          style: { color: '#666' }
         },
         gridLineColor: 'rgba(102, 102, 102, 0.2)',
         softMin: Math.min(...data.map(item => Math.min(item.baseApy, item.maxApy))) * 0.9,
@@ -109,17 +186,13 @@ export const ApyGraph = () => {
       {
         title: {
           text: 'TVL',
-          style: {
-            color: '#4CAF50'
-          }
+          style: { color: '#4CAF50' }
         },
         labels: {
           formatter: function(this: Highcharts.AxisLabelsFormatterContextObject) {
             return '$' + (Number(this.value) / 1000000).toFixed(1) + 'M';
           },
-          style: {
-            color: '#666'
-          }
+          style: { color: '#666' }
         },
         opposite: true,
         gridLineWidth: 0
@@ -148,41 +221,8 @@ export const ApyGraph = () => {
         yAxis: 1,
         dashStyle: 'ShortDot'
       }
-    ],
-    legend: {
-      itemStyle: {
-        color: '#fff'
-      }
-    },
-    tooltip: {
-      shared: true,
-      useHTML: true,
-      headerFormat: '<div style="font-size: 12px; font-weight: bold; padding-bottom: 5px">{point.key}</div>',
-      pointFormatter: function() {
-        if (this.series.name === 'TVL') {
-          return `<div style="color: ${this.color}">${this.series.name}: $${(this.y / 1000000).toFixed(2)}M</div>`;
-        }
-        return `<div style="color: ${this.color}">${this.series.name}: ${this.y.toFixed(2)}%</div>`;
-      },
-      backgroundColor: '#1A1F2C',
-      borderColor: 'rgba(155, 135, 245, 0.2)',
-      borderRadius: 8,
-      padding: 12,
-      style: {
-        color: '#fff'
-      }
-    },
-    plotOptions: {
-      line: {
-        marker: {
-          enabled: false
-        }
-      }
-    },
-    credits: {
-      enabled: false
-    }
-  };
+    ]
+  }), [data, timeframe]);
 
   return (
     <Card className="bg-tapir-card border-purple-500/20">
@@ -195,11 +235,7 @@ export const ApyGraph = () => {
               variant={timeframe === period ? "secondary" : "ghost"}
               size="sm"
               onClick={() => setTimeframe(period as typeof timeframe)}
-              className={`text-xs ${
-                timeframe === period
-                  ? "bg-purple-500 hover:bg-purple-500/90"
-                  : "hover:bg-purple-500/10"
-              }`}
+              className={`text-xs ${timeframe === period ? "bg-purple-500 hover:bg-purple-500/90" : "hover:bg-purple-500/10"}`}
             >
               {period}
             </Button>
@@ -207,10 +243,16 @@ export const ApyGraph = () => {
         </div>
       </CardHeader>
       <CardContent>
-        <HighchartsReact
-          highcharts={Highcharts}
-          options={options}
-        />
+        {error ? (
+          <div className="text-red-500 text-center py-8">{error}</div>
+        ) : isLoading ? (
+          <div className="text-gray-400 text-center py-8">Loading...</div>
+        ) : (
+          <HighchartsReact
+            highcharts={Highcharts}
+            options={chartOptions}
+          />
+        )}
       </CardContent>
     </Card>
   );
