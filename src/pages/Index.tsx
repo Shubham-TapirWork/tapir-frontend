@@ -25,7 +25,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-slate-900 flex flex-col">
       <Navbar selectedAsset={selectedAsset} onAssetChange={handleAssetChange} />
-      <div className="container mx-auto px-4 flex-grow my-8">
+      <div className="container mx-auto px-4 grow my-8">
         {isWrongNetwork ? (
           <div className="text-purple-500 bg-purple-500/10 border border-purple-500/20 rounded-lg p-4 mb-6 text-center flex flex-col justify-center">
             <p className="font-medium">Please switch to Sepolia Test Network</p>
