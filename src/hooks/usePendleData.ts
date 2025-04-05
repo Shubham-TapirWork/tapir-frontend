@@ -52,7 +52,7 @@ export const usePendleData = ({
           timeFrameParam = 'week';
       }
 
-      const url = new URL(`https://api-v2.pendle.finance/bff/v1/${chainId}/markets/${marketAddress}/stat-history`);
+      const url = new URL(`https://api-v2.pendle.finance/core/v1/${chainId}/markets/${marketAddress}/stat-history`);
       url.searchParams.append('time_frame', timeFrameParam);
       url.searchParams.append('timestamp_start', startDate.toISOString());
       url.searchParams.append('timestamp_end', now.toISOString());
