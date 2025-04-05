@@ -126,7 +126,7 @@ export const PoolChart = ({ selectedPool }: PoolChartProps) => {
             <button
               key={period}
               onClick={() => setTimeframe(period as typeof timeframe)}
-              className={`px-3 py-1 text-xs rounded-md transition-all duration-200 ${
+              className={`px-3 py-1 text-xs rounded-md transition-all duration-200 cursor-pointer ${
                 timeframe === period
                   ? "bg-purple-500 text-white"
                   : "text-gray-400 hover:bg-purple-500/20"

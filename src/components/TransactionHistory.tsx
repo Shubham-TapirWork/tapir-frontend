@@ -108,10 +108,10 @@ export const TransactionHistory = ({ selectedPool }: TransactionHistoryProps) =>
                 value={valueFilter}
                 onValueChange={setValueFilter}
               >
-                <SelectTrigger className="w-[140px] h-8 bg-tapir-dark/50 border-purple-500/20 text-white text-sm">
+                <SelectTrigger className="w-[140px] h-8 bg-tapir-dark/50 border-purple-500/20 text-white text-sm cursor-pointer">
                   <SelectValue placeholder="Filter by value" />
                 </SelectTrigger>
-                <SelectContent className="bg-tapir-card border-purple-500/20">
+                <SelectContent className="bg-tapir-card border-purple-500/20 cursor-pointer text-white">
                   <SelectItem value="all">All Actions</SelectItem>
                   <SelectItem value="50">$50 & above</SelectItem>
                 </SelectContent>
@@ -130,7 +130,7 @@ export const TransactionHistory = ({ selectedPool }: TransactionHistoryProps) =>
           <div className="flex gap-2">
             <button
               onClick={() => setActiveTab('trade')}
-              className={`px-4 py-1 rounded-md text-sm transition-colors ${
+              className={`px-4 py-1 rounded-md text-sm transition-colors cursor-pointer ${
                 activeTab === 'trade'
                   ? 'bg-purple-500 text-white'
                   : 'text-gray-400 hover:text-white'
@@ -140,7 +140,7 @@ export const TransactionHistory = ({ selectedPool }: TransactionHistoryProps) =>
             </button>
             <button
               onClick={() => setActiveTab('liquidity')}
-              className={`px-4 py-1 rounded-md text-sm transition-colors ${
+              className={`px-4 py-1 rounded-md text-sm transition-colors cursor-pointer ${
                 activeTab === 'liquidity'
                   ? 'bg-purple-500 text-white'
                   : 'text-gray-400 hover:text-white'
