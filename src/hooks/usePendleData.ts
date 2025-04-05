@@ -40,7 +40,7 @@ export const usePendleData = ({
 
       switch (timeframe) {
         case '1h':
-          startDate.setHours(now.getHours() - 72);
+          startDate.setDate(now.getDate() - 12);
           timeFrameParam = 'hour';
           break;
         case '1d':
@@ -57,7 +57,17 @@ export const usePendleData = ({
       url.searchParams.append('timestamp_start', startDate.toISOString());
       url.searchParams.append('timestamp_end', now.toISOString());
 
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        headers: {
+          'Accept': 'application/json',
+          'Cache-Control': 'no-cache'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const jsonData = await response.json();
       const parsedData = parsePendleData(jsonData.results);
       
