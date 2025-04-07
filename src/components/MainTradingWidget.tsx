@@ -19,7 +19,7 @@ export const MainTradeWidget = () => {
 
   const isWalletConnected = !!account;
 
-  // Get native token (ETH) balance
+  // Get native token balance
   const { data: ethBalance, isLoading: isLoadingBalance, isError: isErrorNativeBalance } = useWalletBalance({
     chain: activeChain,
     address: account?.address,

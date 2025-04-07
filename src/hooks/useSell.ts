@@ -4,6 +4,7 @@ import { defineChain, getContract, prepareContractCall, sendAndConfirmTransactio
 import { useActiveAccount } from "thirdweb/react";
 import { useState } from "react";
 import { client } from "@/client";
+import { CHAIN_ID } from "@/constants/env";
 
 interface UseSellProps {
   onSuccess?: () => void;
@@ -14,7 +15,7 @@ export const useSelling = ({ onSuccess }: UseSellProps = {}) => {
   const [isSelling, setIsSelling] = useState(false);
   const contract = getContract({
     client,
-    chain: defineChain(11155111),
+    chain: defineChain(CHAIN_ID),
     address: contracts.liquidityPoolContract.address,
   });
 

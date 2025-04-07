@@ -4,6 +4,7 @@ import { useActiveAccount } from "thirdweb/react";
 import { toast } from "sonner";
 import { client } from "@/client";
 import contracts from "@/contracts/contracts.json";
+import { CHAIN_ID } from "@/constants/env";
 
 interface UseApproveProps {
   onSuccess?: () => void;
@@ -15,13 +16,13 @@ export const useApprove = ({ onSuccess }: UseApproveProps = {}) => {
 
   const tethContract = getContract({
     client,
-    chain: defineChain(11155111),
+    chain: defineChain(CHAIN_ID),
     address: contracts.tethContract.address,
   });
 
   const liquidityPoolContract = getContract({
     client,
-    chain: defineChain(11155111),
+    chain: defineChain(CHAIN_ID),
     address: contracts.liquidityPoolContract.address,
   });
 

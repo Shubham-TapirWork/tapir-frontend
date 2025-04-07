@@ -4,6 +4,7 @@ import { createWallet, walletConnect } from "thirdweb/wallets";
 // Constants
 import { client } from "@/client";
 import { defineChain } from "thirdweb";
+import { CHAIN_ID } from "@/constants/env";
 
 export const thirdwebAllowedWallets = [
   createWallet("io.metamask"),
@@ -33,7 +34,7 @@ export const WalletButton = () => {
           primaryButtonText: "hsl(0, 0%, 100%)",
         },
       })}
-      chain={defineChain(11155111)}
+      chain={defineChain(CHAIN_ID)}
     />
   );
 };

@@ -3,6 +3,7 @@ import { defineChain, getContract, prepareContractCall } from "thirdweb";
 import { useActiveAccount } from "thirdweb/react";
 import { client } from "@/client";
 import contracts from "@/contracts/contracts.json";
+import { CHAIN_ID } from "@/constants/env";
 
 export const useTokenAllowance = (isWalletConnected: boolean) => {
   const [allowance, setAllowance] = useState<bigint>(BigInt(0));
@@ -11,13 +12,13 @@ export const useTokenAllowance = (isWalletConnected: boolean) => {
 
   const tethContract = getContract({
     client,
-    chain: defineChain(11155111),
+    chain: defineChain(CHAIN_ID),
     address: contracts.tethContract.address,
   });
 
   const liquidityPoolContract = getContract({
     client,
-    chain: defineChain(11155111),
+    chain: defineChain(CHAIN_ID),
     address: contracts.liquidityPoolContract.address,
   });
 
@@ -37,7 +38,7 @@ export const useTokenAllowance = (isWalletConnected: boolean) => {
       });
 
       const currentAllowance = await allowanceCall.data;
-      console.log("Current allowance:", currentAllowance.toString());
+      console.log("Current allowance:", currentAllowance?.toString());
       // setAllowance(BigInt(currentAllowance));
     } catch (error) {
       console.error('Error checking allowance:', error);

@@ -5,6 +5,7 @@ import { defineChain, getContract, prepareContractCall, sendAndConfirmTransactio
 import { useActiveAccount, useActiveWalletChain, useWalletBalance } from "thirdweb/react";
 import { client } from "@/client";
 import contracts from "@/contracts/contracts.json";
+import { CHAIN_ID } from "@/constants/env";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -18,7 +19,7 @@ export const SplitControl = () => {
   const account = useActiveAccount();
   const chain = useActiveWalletChain();
 
-  // Get native token (ETH) balance
+  // Get native token balance
   const { data: balance, isLoading: isLoadingBalance, isError: isErrorNativeBalance } = useWalletBalance({
     chain,
     address: account?.address,
@@ -27,7 +28,7 @@ export const SplitControl = () => {
 
   const contract = getContract({
     client,
-    chain: defineChain(11155111),
+    chain: defineChain(CHAIN_ID),
     address: contracts.depegPoolContract.address,
   });
 
@@ -68,13 +69,13 @@ export const SplitControl = () => {
 
       await sendAndConfirmTransaction({
         transaction,
-        account,
+        account: account!,
       });
 
       toast.success("Successfully split ETH into DP and YB tokens!");
     } catch (error) {
       console.error("Split failed:", error);
-      toast.error(error.message || "Failed to split ETH");
+      toast.error(error instanceof Error ? error.message : "Failed to split ETH");
     } finally {
       setIsSplitting(false);
     }

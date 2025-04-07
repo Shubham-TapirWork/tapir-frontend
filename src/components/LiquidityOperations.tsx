@@ -10,6 +10,7 @@ import { defineChain, getContract, prepareContractCall, sendAndConfirmTransactio
 import { client } from "@/client";
 import { parseEther } from "ethers";
 import contracts from "@/contracts/contracts.json";
+import { CHAIN_ID } from "@/constants/env";
 import { useSearchParams } from "react-router-dom";
 
 interface PoolData {
@@ -37,7 +38,7 @@ export const LiquidityOperations = ({ selectedPool }: LiquidityOperationsProps) 
 
   const contract = getContract({
     client,
-    chain: defineChain(11155111),
+    chain: defineChain(CHAIN_ID),
     address: contracts.stableSwapContract.address,
   });
 
@@ -72,7 +73,7 @@ export const LiquidityOperations = ({ selectedPool }: LiquidityOperationsProps) 
       
       const { transactionHash } = await sendAndConfirmTransaction({
         transaction,
-        account,
+        account: account!,
       });
 
       toast.success("Successfully added liquidity!");
@@ -108,7 +109,7 @@ export const LiquidityOperations = ({ selectedPool }: LiquidityOperationsProps) 
       
       const { transactionHash } = await sendAndConfirmTransaction({
         transaction,
-        account,
+        account: account!,
       });
 
       toast.success("Successfully removed liquidity!");

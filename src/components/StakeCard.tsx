@@ -6,6 +6,7 @@ import { parseEther } from "ethers";
 import { useActiveAccount } from "thirdweb/react";
 import { defineChain, getContract, prepareContractCall, sendAndConfirmTransaction } from "thirdweb";
 import { client } from "@/client";
+import { CHAIN_ID } from "@/constants/env";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EthInput } from "./EthInput";
@@ -57,7 +58,7 @@ export const StakeCard = ({
 
   const contract = getContract({
     client,
-    chain: defineChain(11155111),
+    chain: defineChain(CHAIN_ID),
     address: contracts.liquidityPoolContract.address,
   });
 
