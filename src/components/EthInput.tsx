@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 interface EthInputProps {
   amount: string;
   setAmount: (value: string) => void;
-  userBalance: {
+  userBalance?: {
     value: bigint;
     decimals: number;
     displayValue: string;
@@ -56,7 +56,7 @@ export const EthInput = ({
         pattern="[0-9]*[.]?[0-9]*"
       />
       <button
-        onClick={() => setAmount(userBalance?.displayValue)}
+        onClick={() => setAmount(userBalance?.displayValue || '0')}
         className="absolute right-3 top-[70%] -translate-y-1/2 text-xs font-medium text-white cursor-pointer disabled:cursor-not-allowed disabled:opacity-80 hover:opacity-80 transition-all duration-300"
         disabled={!isWalletConnected}
       >

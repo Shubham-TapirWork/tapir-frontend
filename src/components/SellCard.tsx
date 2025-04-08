@@ -8,7 +8,7 @@ import { useSelling } from "@/hooks/useSell";
 
 interface SellCardProps {
   isWalletConnected: boolean;
-  userBalance: {
+  userBalance?: {
     value: bigint;
     decimals: number;
     displayValue: string;
@@ -63,12 +63,12 @@ export const SellCard = ({
 
           <Button
             onClick={() => handleOrder(amount)}
-            disabled={!isWalletConnected || isSelling || parseFloat(userBalance?.displayValue) <= parseFloat(amount || '0')}
+            disabled={!isWalletConnected || isSelling || parseFloat(userBalance?.displayValue || '0') <= parseFloat(amount || '0')}
             className="w-full bg-purple-500 hover:opacity-90 text-white"
           >
             {(() => {
               if (!isWalletConnected) return "Connect Wallet";
-              if (parseFloat(userBalance?.displayValue) <= parseFloat(amount || '0'))
+              if (parseFloat(userBalance?.displayValue || '0') <= parseFloat(amount || '0'))
                 return "Insufficient Balance";
               if (isSelling)
                 return (

@@ -21,7 +21,7 @@ export const StakeCard = ({
   selectedStrategy,
 }: {
   isWalletConnected: boolean;
-  userBalance: {
+  userBalance?: {
     value: bigint;
     decimals: number;
     displayValue: string;
@@ -93,7 +93,7 @@ export const StakeCard = ({
         toast.error("Please enter a valid amount greater than 0");
       }
       
-      const balance = parseFloat(userBalance.displayValue);
+      const balance = parseFloat(userBalance?.displayValue || '0');
       if (amount > balance) {
         toast.error("Insufficient balance");
       }
