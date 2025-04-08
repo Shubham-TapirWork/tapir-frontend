@@ -3,8 +3,9 @@ import { defineChain, getContract, prepareContractCall, sendTransaction } from "
 import { useActiveAccount } from "thirdweb/react";
 import { toast } from "sonner";
 import { client } from "@/client";
-import contracts from "@/contracts/contracts.json";
 import { CHAIN_ID } from "@/constants/env";
+import tethContract from "@/contracts/tethContract.json";
+import liquidityPoolContract from "@/contracts/liquidityPoolContract.json";
 
 interface UseApproveProps {
   onSuccess?: () => void;
@@ -14,16 +15,10 @@ export const useApprove = ({ onSuccess }: UseApproveProps = {}) => {
   const [isApproving, setIsApproving] = useState(false);
   const account = useActiveAccount();
 
-  const tethContract = getContract({
+  const tethContractinstance = getContract({
     client,
     chain: defineChain(CHAIN_ID),
-    address: contracts.tethContract.address,
-  });
-
-  const liquidityPoolContract = getContract({
-    client,
-    chain: defineChain(CHAIN_ID),
-    address: contracts.liquidityPoolContract.address,
+    address: tethContract.address,
   });
 
   const handleApprove = async (tethAmount: string) => {
@@ -42,7 +37,7 @@ export const useApprove = ({ onSuccess }: UseApproveProps = {}) => {
       const amountInWei = BigInt(Math.floor(parseFloat(tethAmount) * 1e18));
       
       const transaction = await prepareContractCall({
-        contract: tethContract,
+        contract: tethContractinstance,
         method: "function approve(address spender, uint256 amount) returns (bool)",
         params: [liquidityPoolContract.address, amountInWei],
       });
