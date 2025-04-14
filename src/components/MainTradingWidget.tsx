@@ -1,12 +1,15 @@
-import { StakingCard } from "./StakingCard";
+import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
+import { useActiveAccount, useWalletBalance, useActiveWalletChain } from "thirdweb/react";
+
+import { StakingCard } from "./StakingCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StakeCard } from "./StakeCard";
 import { SellCard } from "./SellCard";
-import { useActiveAccount, useWalletBalance, useActiveWalletChain } from "thirdweb/react";
-import contracts from "@/contracts/contracts.json";
 import { client } from "@/client";
-import { useSearchParams } from "react-router-dom";
+import tethContract from "@/contracts/tethContract.json";
+import dpContract from "@/contracts/dpContract.json";
+import ybContract from "@/contracts/ybContract.json";
 
 export const MainTradeWidget = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -31,7 +34,7 @@ export const MainTradeWidget = () => {
     chain: activeChain,
     address: account?.address,
     client,
-    tokenAddress: contracts.tethContract.address
+    tokenAddress: tethContract.address
   });
 
   // Get DP token balance
@@ -39,7 +42,7 @@ export const MainTradeWidget = () => {
     chain: activeChain,
     address: account?.address,
     client,
-    tokenAddress: contracts.dpContract.address
+    tokenAddress: dpContract.address
   });
 
   // Get YB token balance
@@ -47,7 +50,7 @@ export const MainTradeWidget = () => {
     chain: activeChain,
     address: account?.address,
     client,
-    tokenAddress: contracts.ybContract.address
+    tokenAddress: ybContract.address
   });
 
   const handleStrategySelect = (strategy: "safe" | "regular" | "boosted") => {

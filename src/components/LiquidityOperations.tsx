@@ -9,7 +9,7 @@ import { useActiveAccount } from "thirdweb/react";
 import { defineChain, getContract, prepareContractCall, sendAndConfirmTransaction } from "thirdweb";
 import { client } from "@/client";
 import { parseEther } from "ethers";
-import contracts from "@/contracts/contracts.json";
+import stableSwapContract from "@/contracts/stableSwapContract.json";
 import { CHAIN_ID } from "@/constants/env";
 import { useSearchParams } from "react-router-dom";
 
@@ -39,7 +39,7 @@ export const LiquidityOperations = ({ selectedPool }: LiquidityOperationsProps) 
   const contract = getContract({
     client,
     chain: defineChain(CHAIN_ID),
-    address: contracts.stableSwapContract.address,
+    address: stableSwapContract.address,
   });
 
   const handleSliderChange = (value: number[]) => {

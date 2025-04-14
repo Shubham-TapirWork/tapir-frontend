@@ -2,24 +2,19 @@ import { useState, useEffect } from "react";
 import { defineChain, getContract, prepareContractCall } from "thirdweb";
 import { useActiveAccount } from "thirdweb/react";
 import { client } from "@/client";
-import contracts from "@/contracts/contracts.json";
 import { CHAIN_ID } from "@/constants/env";
+import tethContract from "@/contracts/tethContract.json";
+import liquidityPoolContract from "@/contracts/liquidityPoolContract.json";
 
 export const useTokenAllowance = (isWalletConnected: boolean) => {
   const [allowance, setAllowance] = useState<bigint>(BigInt(0));
   const [isCheckingAllowance, setIsCheckingAllowance] = useState(false);
   const account = useActiveAccount();
 
-  const tethContract = getContract({
+  const tethContractinstance = getContract({
     client,
     chain: defineChain(CHAIN_ID),
-    address: contracts.tethContract.address,
-  });
-
-  const liquidityPoolContract = getContract({
-    client,
-    chain: defineChain(CHAIN_ID),
-    address: contracts.liquidityPoolContract.address,
+    address: tethContract.address,
   });
 
   const checkAllowance = async () => {
@@ -32,7 +27,7 @@ export const useTokenAllowance = (isWalletConnected: boolean) => {
       console.log("Spender (liquidity pool):", liquidityPoolContract.address);
 
       const allowanceCall = prepareContractCall({
-        contract: tethContract,
+        contract: tethContractinstance,
         method: "function allowance(address owner, address spender) view returns (uint256)",
         params: [account.address, liquidityPoolContract.address],
       });

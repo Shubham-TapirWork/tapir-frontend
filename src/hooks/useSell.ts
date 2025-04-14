@@ -1,10 +1,10 @@
 import { toast } from "sonner";
-import contracts from "@/contracts/contracts.json";
 import { defineChain, getContract, prepareContractCall, sendAndConfirmTransaction } from "thirdweb";
 import { useActiveAccount } from "thirdweb/react";
 import { useState } from "react";
 import { client } from "@/client";
 import { CHAIN_ID } from "@/constants/env";
+import liquidityPoolContract from "@/contracts/liquidityPoolContract.json";
 
 interface UseSellProps {
   onSuccess?: () => void;
@@ -16,7 +16,7 @@ export const useSelling = ({ onSuccess }: UseSellProps = {}) => {
   const contract = getContract({
     client,
     chain: defineChain(CHAIN_ID),
-    address: contracts.liquidityPoolContract.address,
+    address: liquidityPoolContract.address,
   });
 
   const handleOrder = async (tethAmount: string) => {

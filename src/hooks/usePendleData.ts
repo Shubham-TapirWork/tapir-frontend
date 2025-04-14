@@ -40,7 +40,7 @@ export const usePendleData = ({
 
       switch (timeframe) {
         case '1h':
-          startDate.setDate(now.getDate() - 12);
+          startDate.setDate(now.getDate() - 15);
           timeFrameParam = 'hour';
           break;
         case '1d':

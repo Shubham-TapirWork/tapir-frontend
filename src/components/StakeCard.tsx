@@ -12,7 +12,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EthInput } from "./EthInput";
 import { StakingInfo } from "./StakingInfo";
 import { StakeButton } from "./stake/StakeButton";
-import contracts from "@/contracts/contracts.json";
+import depegPoolContract from "@/contracts/depegPoolContract.json";
+import stableSwapContract from "@/contracts/stableSwapContract.json";
+import liquidityPoolContract from "@/contracts/liquidityPoolContract.json";
+import ybContract from "@/contracts/ybContract.json";
+import dpContract from "@/contracts/dpContract.json";
 
 export const StakeCard = ({
   isWalletConnected,
@@ -51,15 +55,15 @@ export const StakeCard = ({
   const account = useActiveAccount();
   const amountInWei = ethAmount ? parseEther(ethAmount) : parseEther("0");
 
-  const depegPoolAddress = contracts.depegPoolContract.address;
-  const stableSwapAddress = contracts.stableSwapContract.address;
-  const ybAddress = contracts.ybContract.address;
-  const dpAddress = contracts.dpContract.address;
+  const depegPoolAddress = depegPoolContract.address;
+  const stableSwapAddress = stableSwapContract.address;
+  const ybAddress = ybContract.address;
+  const dpAddress = dpContract.address;
 
   const contract = getContract({
     client,
     chain: defineChain(CHAIN_ID),
-    address: contracts.liquidityPoolContract.address,
+    address: liquidityPoolContract.address,
   });
 
   const transaction = prepareContractCall({

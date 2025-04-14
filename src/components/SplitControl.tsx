@@ -4,7 +4,7 @@ import { parseEther } from "ethers";
 import { defineChain, getContract, prepareContractCall, sendAndConfirmTransaction } from "thirdweb";
 import { useActiveAccount, useActiveWalletChain, useWalletBalance } from "thirdweb/react";
 import { client } from "@/client";
-import contracts from "@/contracts/contracts.json";
+import depegPoolContract from "@/contracts/depegPoolContract.json";
 import { CHAIN_ID } from "@/constants/env";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -29,7 +29,7 @@ export const SplitControl = () => {
   const contract = getContract({
     client,
     chain: defineChain(CHAIN_ID),
-    address: contracts.depegPoolContract.address,
+    address: depegPoolContract.address,
   });
 
   const transaction = prepareContractCall({
