@@ -65,14 +65,21 @@ export const ApyGraph = () => {
       {
         name: 'Base APY',
         data: data.map(item => item.baseApy),
-        color: '#9b87f5',
+        color: '#7E69AB',
         type: 'line',
         yAxis: 0
       },
       {
-        name: 'Max APY',
-        data: data.map(item => item.maxApy),
+        name: 'DP APY',
+        data: data.map(item => item.baseApy * 0.9),
         color: '#7E69AB',
+        type: 'line',
+        yAxis: 0
+      },
+      {
+        name: 'YB APY',
+        data: data.map(item => item.maxApy),
+        color: '#9b87f5',
         type: 'line',
         yAxis: 0
       },
@@ -89,7 +96,7 @@ export const ApyGraph = () => {
 
   return (
     <Card className="bg-tapir-card border-purple-500/20">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1">
         <CardTitle className="text-white">Historical APY</CardTitle>
         <div className="flex gap-2 text-white hover:text-white">
           {["1h", "1d", "1w"].map((period) => (
@@ -105,6 +112,13 @@ export const ApyGraph = () => {
           ))}
         </div>
       </CardHeader>
+      <p className="text-xs px-6 pb-4 text-gray-400">
+        Expiry: {new Date(Date.now() + 26 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { 
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric'
+        })} ({26} days)
+      </p>
       <CardContent>
         {error ? (
           <div className="text-red-500 text-center py-8">{error}</div>

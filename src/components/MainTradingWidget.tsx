@@ -86,7 +86,7 @@ export const MainTradeWidget = () => {
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <StakingCard
-          title="Regular Token"
+          title="Base ETH Asset"
           description="Pendle asset"
           apy="4.15%"
           type="regular"
@@ -95,7 +95,7 @@ export const MainTradeWidget = () => {
           disabled={!isWalletConnected}
         />
         <StakingCard
-          title="DP Token"
+          title="Depeg Protected ETH Asset"
           description="Depeg Protected"
           apy="8.15%"
           type="safe"
@@ -104,7 +104,7 @@ export const MainTradeWidget = () => {
           disabled={!isWalletConnected}
         />
         <StakingCard
-          title="YB Token"
+          title="Yield Boosted ETH Asset"
           description="Yield Boosted"
           apy="12.50%"
           type="boosted"
